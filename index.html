@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -11,123 +9,118 @@
     >
 
     <meta
-        name="theme-color"
-        content="#060a11"
+        name="description"
+        content="Namma Circuit Universe — Learn ECE from absolute basics to advanced engineering through interactive lessons, real-world examples, labs, projects and quizzes."
     >
 
     <meta
-        name="description"
-        content="Namma Circuit Universe — an interactive ECE learning universe from absolute basics to advanced electronics."
+        name="theme-color"
+        content="#070b12"
     >
 
     <title>Namma Circuit — ECE Universe</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <link
-        rel="stylesheet"
-        href="styles.css"
-    >
-
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <!-- Background -->
-    <div class="noise"></div>
-    <div class="grid-bg"></div>
+    <!-- =========================================================
+         BACKGROUND
+    ========================================================== -->
 
-    <div class="ambient ambient-1"></div>
-    <div class="ambient ambient-2"></div>
+    <div class="background-grid"></div>
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
 
-    <!-- Header -->
-    <header class="header">
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
 
-        <a
-            href="#/"
-            class="brand"
-        >
+    <header class="site-header">
 
-            <div class="brand-logo">
+        <a href="#/" class="brand">
+            <div class="brand-mark">
                 ⚡
             </div>
 
-            <div class="brand-text">
-
-                <strong>
-                    NAMMA CIRCUIT
-                </strong>
-
-                <span>
-                    ECE UNIVERSE
-                </span>
-
+            <div class="brand-copy">
+                <strong>NAMMA CIRCUIT</strong>
+                <span>ECE UNIVERSE</span>
             </div>
-
         </a>
 
-        <nav class="nav">
+        <nav class="desktop-nav">
 
-            <a href="#/">
-                Home
-            </a>
+            <a href="#/" data-route="/">Home</a>
 
-            <a href="#/universe">
+            <a
+                href="#/universe"
+                data-route="/universe"
+            >
                 Universe
             </a>
 
-            <a href="#/learn">
+            <a
+                href="#/learn"
+                data-route="/learn"
+            >
                 Learn
             </a>
 
-            <a href="#/everyday">
+            <a
+                href="#/everyday"
+                data-route="/everyday"
+            >
                 Everyday
             </a>
 
-            <a href="#/lab">
+            <a
+                href="#/lab"
+                data-route="/lab"
+            >
                 Lab
             </a>
 
-            <a href="#/quiz">
+            <a
+                href="#/quiz"
+                data-route="/quiz"
+            >
                 Quiz
             </a>
 
         </nav>
 
-        <div class="header-right">
+        <div class="header-actions">
 
             <button
-                class="search-btn"
-                id="searchOpen"
-                title="Search"
+                class="icon-button"
+                id="searchButton"
+                aria-label="Search"
             >
                 ⌕
             </button>
 
             <a
                 href="#/progress"
-                class="xp-pill"
+                class="progress-pill"
             >
-                ⚡
-                <span id="xpDisplay">
-                    0 XP
-                </span>
+                <span>⚡</span>
+                <strong id="headerXp">0 XP</strong>
             </a>
 
             <button
-                class="mobile-menu"
-                id="mobileMenu"
+                class="menu-button"
+                id="menuButton"
+                aria-label="Open menu"
             >
                 ☰
             </button>
@@ -136,11 +129,11 @@
 
     </header>
 
-    <!-- Mobile navigation -->
-    <div
-        class="mobile-nav"
-        id="mobileNav"
-    >
+    <!-- =========================================================
+         MOBILE NAV
+    ========================================================== -->
+
+    <div class="mobile-nav" id="mobileNav">
 
         <a href="#/">Home</a>
         <a href="#/universe">Universe</a>
@@ -148,65 +141,61 @@
         <a href="#/everyday">Everyday Engineering</a>
         <a href="#/lab">NCU Lab</a>
         <a href="#/quiz">Quiz Arena</a>
-        <a href="#/progress">Progress</a>
+        <a href="#/progress">My Progress</a>
 
     </div>
 
-    <!-- Main -->
+    <!-- =========================================================
+         APPLICATION
+    ========================================================== -->
+
     <main id="app"></main>
 
-    <!-- Search -->
+    <!-- =========================================================
+         SEARCH MODAL
+    ========================================================== -->
+
     <div
-        class="search-overlay"
-        id="searchOverlay"
+        class="modal-backdrop"
+        id="searchModal"
+        aria-hidden="true"
     >
 
-        <div class="search-box">
+        <div class="search-modal">
 
-            <div class="search-top">
+            <div class="search-modal-header">
 
                 <div>
-
-                    <span class="eyebrow">
-                        NCU SEARCH ENGINE
-                    </span>
-
-                    <h2>
-                        Find your concept.
-                    </h2>
-
+                    <span class="eyebrow">NCU SEARCH</span>
+                    <h2>Find anything in ECE.</h2>
                 </div>
 
                 <button
-                    class="close-btn"
-                    id="searchClose"
+                    class="icon-button"
+                    id="closeSearch"
                 >
                     ×
                 </button>
 
             </div>
 
-            <div class="search-input">
+            <div class="search-input-wrap">
 
-                <span>
-                    ⌕
-                </span>
+                <span>⌕</span>
 
                 <input
-                    id="searchInput"
                     type="search"
-                    placeholder="Search voltage, transistor, ESP32..."
+                    id="searchInput"
+                    placeholder="Try “Ohm's Law”, “MOSFET”, “ESP32”..."
+                    autocomplete="off"
                 >
 
             </div>
 
-            <div
-                class="search-results"
-                id="searchResults"
-            >
+            <div id="searchResults" class="search-results">
 
-                <div class="search-placeholder">
-                    Search the ECE Universe.
+                <div class="search-empty">
+                    Start typing to explore the ECE Universe.
                 </div>
 
             </div>
@@ -215,67 +204,55 @@
 
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
 
-        <div class="footer-inner">
+    <footer class="site-footer">
+
+        <div class="footer-main">
 
             <div>
 
                 <div class="footer-brand">
-                    ⚡ NAMMA CIRCUIT
+                    ⚡ Namma Circuit
                 </div>
 
                 <p>
                     Short Circuit illa, Smart Circuit.
                 </p>
 
-                <small>
-                    An interactive ECE learning universe.
-                </small>
+                <p class="footer-description">
+                    An interactive ECE learning universe —
+                    from the first electron to advanced engineering.
+                </p>
 
             </div>
 
             <div class="footer-links">
 
                 <div>
+                    <span>EXPLORE</span>
 
-                    <span>
-                        EXPLORE
-                    </span>
-
-                    <a href="#/universe">
-                        ECE Universe
-                    </a>
-
-                    <a href="#/learn">
-                        Learn
-                    </a>
-
-                    <a href="#/everyday">
-                        Everyday Engineering
-                    </a>
-
+                    <a href="#/universe">ECE Universe</a>
+                    <a href="#/learn">Learn</a>
+                    <a href="#/everyday">Everyday Engineering</a>
                 </div>
 
                 <div>
+                    <span>BUILD</span>
 
-                    <span>
-                        EXPERIENCE
-                    </span>
+                    <a href="#/lab">NCU Lab</a>
+                    <a href="#/projects">Projects</a>
+                    <a href="#/quiz">Quiz Arena</a>
+                </div>
 
-                    <a href="#/lab">
-                        NCU Lab
-                    </a>
+                <div>
+                    <span>NCU</span>
 
-                    <a href="#/quiz">
-                        Quiz Arena
-                    </a>
-
-                    <a href="#/characters">
-                        Circuit Crew
-                    </a>
-
+                    <a href="#/characters">Circuit Crew</a>
+                    <a href="#/stories">Stories</a>
+                    <a href="#/progress">Progress</a>
                 </div>
 
             </div>
@@ -285,11 +262,11 @@
         <div class="footer-bottom">
 
             <span>
-                © <span id="year"></span> Namma Circuit
+                © <span id="footerYear"></span> Namma Circuit
             </span>
 
             <span>
-                Built for curious engineers.
+                Built for curious ECE minds.
             </span>
 
         </div>
@@ -299,5 +276,4 @@
     <script src="app.js"></script>
 
 </body>
-
 </html>
