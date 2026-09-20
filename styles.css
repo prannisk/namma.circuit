@@ -394,12 +394,14 @@ button {
 
 /* ============================================================
  MOBILE NAV
-============================================================ */
 
 .mobile-nav {
 
   display: none;
 
+
+#app {
+  min-height: 70vh;
   position: fixed;
 
   top: 76px;
@@ -438,7 +440,6 @@ button {
 
 /* ============================================================
  APP CONTAINER
-============================================================ */
 
 #app {
 
@@ -471,7 +472,6 @@ button {
 
 /* ============================================================
  TYPOGRAPHY
-============================================================ */
 
 .eyebrow {
 
@@ -536,13 +536,138 @@ h3 {
 
 .muted {
 
+.btn {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  min-height: 45px;
+
+  padding: 0 17px;
+
+  border-radius: 12px;
+
+  border:
+      1px solid var(--border);
+
+  color: var(--text);
+
+  background:
+      rgba(255,255,255,.035);
+
+  font-weight: 700;
+
+  font-size: 12px;
+
+  transition: .2s;
+
+}
+
+.btn:hover {
+
+  transform:
+      translateY(-2px);
+
+  border-color:
+      var(--border2);
+
+}
+
+.btn-primary {
+
+  background: var(--mint);
+
+  color: #071007;
+
+  border-color: var(--mint);
+
+}
+
+.btn-cyan {
+
+  background: var(--cyan);
+
+  color: #061212;
+
+  border-color: var(--cyan);
+
+}
+
+.btn-ghost {
+
+  background:
+      rgba(255,255,255,.02);
+
+}
+
+/* ============================================================
+ HERO
+
+.hero {
+
+  min-height:
+      calc(100vh - 76px);
+
+  display: grid;
+
+  grid-template-columns:
+      1.05fr .95fr;
+
+  align-items: center;
+
+  gap: 70px;
+
+  padding:
+      75px 0
+      90px;
+
+}
+
+.hero h1 {
+
+  margin-top: 17px;
+
+}
+
+.hero h1 span {
+
+  color: var(--mint);
+
+}
+
+.hero-copy {
+
+  margin-top: 27px;
+
+  max-width: 680px;
+
+  color: var(--muted);
+
+  font-size: 18px;
+
+}
+
+.hero-actions {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 32px;
+
   color: var(--text-muted);
 
 }
 
 /* ============================================================
  HERO
-============================================================ */
 
 .hero {
 
@@ -709,8 +834,11 @@ h3 {
 }
 
 /* ============================================================
+
+.universe-art {
+
+  min-height: 510px;
  UNIVERSE ORBIT
-============================================================ */
 
 .universe-visual {
 
@@ -890,6 +1018,8 @@ h3 {
 
   gap: 30px;
 
+
+.domain-grid {
   margin-bottom: 35px;
 
 }
@@ -904,7 +1034,6 @@ h3 {
 
 /* ============================================================
  CARDS
-============================================================ */
 
 .card-grid {
 
@@ -980,7 +1109,6 @@ h3 {
 
 /* ============================================================
  DOMAIN CARDS
-============================================================ */
 
 .domain-grid {
 
@@ -1088,6 +1216,23 @@ h3 {
 
 .roadmap {
 
+
+.mascot-grid {
+
+  display: grid;
+
+  grid-template-columns:
+      repeat(7, 1fr);
+
+  gap: 10px;
+
+}
+
+.mascot-card {
+
+  padding: 20px 12px;
+
+  text-align: center;
   position: relative;
 
   display: grid;
@@ -1190,7 +1335,6 @@ h3 {
 
 /* ============================================================
  LEARNING PATH
-============================================================ */
 
 .path-panel {
 
@@ -1199,6 +1343,57 @@ h3 {
   border:
       1px solid var(--border);
 
+
+.lesson-hero {
+
+  padding:
+      70px 0
+      45px;
+
+}
+
+.lesson-hero h1 {
+
+  margin-top: 14px;
+
+}
+
+.lesson-hero > p {
+
+  max-width: 750px;
+
+  margin-top: 18px;
+
+  color: var(--muted);
+
+  font-size: 17px;
+
+}
+
+.lesson-layout {
+
+  display: grid;
+
+  grid-template-columns:
+      1fr 300px;
+
+  gap: 18px;
+
+  align-items: start;
+
+}
+
+.lesson-main {
+
+  display: grid;
+
+  gap: 15px;
+
+}
+
+.lesson-card {
+
+  padding: 28px;
   border-radius: var(--radius-lg);
 
   background:
@@ -1246,7 +1441,6 @@ h3 {
 
 /* ============================================================
  LEARN PAGE
-============================================================ */
 
 .topic-grid {
 
@@ -1305,7 +1499,6 @@ h3 {
 
 /* ============================================================
  EVERYDAY ENGINEERING
-============================================================ */
 
 .everyday-grid {
 
@@ -1358,7 +1551,6 @@ h3 {
 
 /* ============================================================
  CHARACTER CARDS
-============================================================ */
 
 .character-grid {
 
@@ -1387,6 +1579,8 @@ h3 {
 
 }
 
+
+.mascot-dialogue {
 .character-avatar {
 
   width: 95px;
@@ -1426,7 +1620,6 @@ h3 {
 
 /* ============================================================
  CALCULATOR
-============================================================ */
 
 .calculator-grid {
 
@@ -1446,6 +1639,46 @@ h3 {
   border:
       1px solid var(--border);
 
+
+.formula-box {
+
+  padding: 25px;
+
+  text-align: center;
+
+  border:
+      1px solid
+      rgba(183,255,99,.13);
+
+  border-radius: 17px;
+
+  background:
+      rgba(183,255,99,.035);
+
+}
+
+.formula {
+
+  margin-top: 10px;
+
+  color: var(--mint);
+
+  font-family: var(--mono);
+
+  font-size: 29px;
+
+}
+
+/* ============================================================
+ INTERACTIVE EXPERIMENT
+
+.experiment {
+
+  overflow: hidden;
+
+}
+
+.experiment-grid {
   border-radius: var(--radius-md);
 
   background: var(--surface);
@@ -1496,6 +1729,65 @@ h3 {
   border:
       1px solid var(--border);
 
+
+.lesson-sidebar {
+
+  position: sticky;
+
+  top: 95px;
+
+  padding: 20px;
+
+  border:
+      1px solid var(--border);
+
+  border-radius: 18px;
+
+  background:
+      var(--surface);
+
+}
+
+.lesson-sidebar a {
+
+  display: block;
+
+  padding: 12px 0;
+
+  color: var(--muted);
+
+  border-bottom:
+      1px solid var(--border);
+
+  font-size: 11px;
+
+}
+
+.lesson-sidebar a:hover {
+
+  color: var(--mint);
+
+}
+
+/* ============================================================
+ TOPIC GRID
+
+.topic-grid {
+
+  display: grid;
+
+  grid-template-columns:
+      repeat(3, 1fr);
+
+  gap: 13px;
+
+}
+
+.topic {
+
+  position: relative;
+
+  padding: 23px;
   border-radius: 9px;
 
   background:
@@ -1533,7 +1825,6 @@ h3 {
 
 /* ============================================================
  QUIZ
-============================================================ */
 
 .quiz-options {
 
@@ -1554,6 +1845,8 @@ h3 {
   border:
       1px solid var(--border);
 
+
+.everyday-grid {
   border-radius: 10px;
 
   background:
@@ -1590,7 +1883,6 @@ h3 {
 
 /* ============================================================
  PROGRESS
-============================================================ */
 
 .progress-dashboard {
 
@@ -1660,6 +1952,59 @@ h3 {
   border:
       1px solid var(--border);
 
+
+.real-life-hero {
+
+  padding:
+      65px 0
+      45px;
+
+}
+
+.real-life-hero h1 {
+
+  margin-top: 13px;
+
+}
+
+.real-life-hero p {
+
+  margin-top: 17px;
+
+  max-width: 720px;
+
+  color: var(--muted);
+
+  font-size: 17px;
+
+}
+
+.device-diagram {
+
+  min-height: 430px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin: 20px 0;
+
+  border:
+      1px solid var(--border);
+
+  border-radius: 25px;
+
+  background:
+      radial-gradient(
+          circle at center,
+          rgba(183,255,99,.045),
+          transparent 45%
+      ),
+      var(--surface);
+
+}
+
+.breakdown {
   border-radius: 14px;
 
   background: var(--surface);
@@ -1682,7 +2027,6 @@ h3 {
 
 /* ============================================================
  DETAIL PAGE
-============================================================ */
 
 .detail-header {
 
@@ -1715,6 +2059,43 @@ h3 {
   display: grid;
 
   grid-template-columns:
+
+.quiz-question {
+
+  padding: 28px;
+
+  border:
+      1px solid var(--border);
+
+  border-radius: 20px;
+
+  background: var(--surface);
+
+}
+
+.quiz-question + .quiz-question {
+
+  margin-top: 13px;
+
+}
+
+.quiz-options {
+
+  display: grid;
+
+  gap: 9px;
+
+  margin-top: 20px;
+
+}
+
+.quiz-option {
+
+  padding: 14px 16px;
+
+  text-align: left;
+
+  color: var(--text);
       1fr 300px;
 
   gap: 25px;
@@ -1736,6 +2117,67 @@ h3 {
   border:
       1px solid var(--border);
 
+
+.progress-card {
+
+  padding: 30px;
+
+  border:
+      1px solid
+      rgba(183,255,99,.15);
+
+  border-radius: 22px;
+
+  background:
+      linear-gradient(
+          145deg,
+          rgba(183,255,99,.065),
+          rgba(255,255,255,.018)
+      );
+
+}
+
+.progress-number {
+
+  margin-top: 8px;
+
+  color: var(--mint);
+
+  font-family: var(--display);
+
+  font-size: 65px;
+
+}
+
+.progress-bar {
+
+  height: 8px;
+
+  margin-top: 17px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+      rgba(255,255,255,.06);
+
+}
+
+.progress-bar span {
+
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+      linear-gradient(
+          90deg,
+          var(--mint),
+          var(--cyan)
+      );
   border-radius: var(--radius-md);
 
   background: var(--surface);
@@ -1986,6 +2428,24 @@ h3 {
 
 }
 
+
+.empty {
+
+  padding:
+      120px 20px;
+
+  text-align: center;
+
+}
+
+.empty p {
+
+  max-width: 500px;
+
+  margin:
+      15px auto;
+
+  color: var(--muted);
 .search-empty {
 
   padding: 40px 10px;
@@ -2130,8 +2590,92 @@ h3 {
 }
 
 /* ============================================================
+
+.circuit-svg {
+
+  width: 100%;
+
+  max-width: 330px;
+
+  height: auto;
+
+}
+
+.circuit-wire {
+
+  stroke: var(--cyan);
+
+  stroke-width: 5;
+
+  fill: none;
+
+  stroke-linecap: round;
+
+}
+
+.circuit-node {
+
+  fill: var(--mint);
+
+}
+
+.circuit-resistor {
+
+  stroke: var(--yellow);
+
+  stroke-width: 7;
+
+  fill: none;
+
+}
+
+.circuit-current {
+
+  stroke: var(--pink);
+
+  stroke-width: 4;
+
+  stroke-dasharray: 10 8;
+
+  animation:
+      flow 1.2s linear infinite;
+
+}
+
+/* ============================================================
+ ANIMATIONS
+
+@keyframes rotate {
+
+  from {
+      transform: rotate(0);
+  }
+
+  to {
+      transform: rotate(360deg);
+  }
+
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+      margin-top: 0;
+  }
+
+  50% {
+      margin-top: -9px;
+  }
+
+}
+
+@keyframes flow {
+
+  to {
+      stroke-dashoffset: -36;
+  }
  EMPTY / ERROR
-============================================================ */
 
 .empty-state {
 
