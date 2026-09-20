@@ -1,6 +1,6 @@
 /* ============================================================
-   NAMMA CIRCUIT — ECE UNIVERSE
-   DAY 1 APPLICATION
+   NAMMA CIRCUIT
+   ECE UNIVERSE — DAY 1
 ============================================================ */
 
 "use strict";
@@ -9,72 +9,225 @@
    STORAGE
 ============================================================ */
 
-const STORAGE_KEYS = {
-    XP: "ncu_xp",
-    COMPLETED: "ncu_completed",
-    LEVEL: "ncu_level"
+const STORAGE = {
+
+    xp: "ncu_xp_v2",
+
+    completed:
+        "ncu_completed_v2"
+
 };
 
 function getXP() {
-    return Number(localStorage.getItem(STORAGE_KEYS.XP) || 0);
+
+    return Number(
+        localStorage.getItem(
+            STORAGE.xp
+        ) || 0
+    );
+
 }
 
 function setXP(value) {
+
     localStorage.setItem(
-        STORAGE_KEYS.XP,
+        STORAGE.xp,
         String(value)
     );
 
-    updateHeaderXP();
-}
-
-function getCompleted() {
-    try {
-        return JSON.parse(
-            localStorage.getItem(
-                STORAGE_KEYS.COMPLETED
-            ) || "[]"
-        );
-    } catch {
-        return [];
-    }
-}
-
-function saveCompleted(items) {
-
-    localStorage.setItem(
-        STORAGE_KEYS.COMPLETED,
-        JSON.stringify(items)
-    );
+    updateXP();
 
 }
 
 function addXP(amount) {
 
-    const current = getXP();
-
-    setXP(current + amount);
+    setXP(
+        getXP() + amount
+    );
 
 }
 
-function completeTopic(id) {
+function getCompleted() {
 
-    const completed = getCompleted();
+    try {
 
-    if (!completed.includes(id)) {
+        return JSON.parse(
+            localStorage.getItem(
+                STORAGE.completed
+            ) || "[]"
+        );
 
-        completed.push(id);
+    } catch {
 
-        saveCompleted(completed);
+        return [];
+
+    }
+
+}
+
+function complete(id) {
+
+    const list =
+        getCompleted();
+
+    if (!list.includes(id)) {
+
+        list.push(id);
+
+        localStorage.setItem(
+            STORAGE.completed,
+            JSON.stringify(list)
+        );
 
         addXP(25);
+
+        return true;
+
+    }
+
+    return false;
+
+}
+
+function level() {
+
+    return Math.floor(
+        getXP() / 100
+    ) + 1;
+
+}
+
+function updateXP() {
+
+    const element =
+        document.getElementById(
+            "xpDisplay"
+        );
+
+    if (element) {
+
+        element.textContent =
+            `${getXP()} XP`;
 
     }
 
 }
 
 /* ============================================================
-   ECE UNIVERSE DATA
+   MASCOTS
+============================================================ */
+
+const mascots = {
+
+    volto: {
+
+        name: "Volto",
+
+        concept: "Voltage",
+
+        emoji: "⚡",
+
+        color: "#b7ff63",
+
+        line:
+            "I'm the push that creates potential difference!"
+
+    },
+
+    curro: {
+
+        name: "Curro",
+
+        concept: "Current",
+
+        emoji: "🌊",
+
+        color: "#46e7d1",
+
+        line:
+            "I'm the flow of electric charge!"
+
+    },
+
+    resi: {
+
+        name: "Resi",
+
+        concept: "Resistance",
+
+        emoji: "🧱",
+
+        color: "#ffd166",
+
+        line:
+            "I make current work harder to pass."
+
+    },
+
+    capa: {
+
+        name: "Capa",
+
+        concept: "Capacitor",
+
+        emoji: "🔋",
+
+        color: "#ff75a8",
+
+        line:
+            "I store electrical energy in an electric field."
+
+    },
+
+    indu: {
+
+        name: "Indu",
+
+        concept: "Inductor",
+
+        emoji: "🌀",
+
+        color: "#9b8cff",
+
+        line:
+            "I don't like sudden changes in current."
+
+    },
+
+    dio: {
+
+        name: "Dio",
+
+        concept: "Diode",
+
+        emoji: "➡️",
+
+        color: "#65a8ff",
+
+        line:
+            "I strongly prefer current flowing in one direction."
+
+    },
+
+    shorty: {
+
+        name: "Shorty",
+
+        concept: "Short Circuit",
+
+        emoji: "💥",
+
+        color: "#ff776c",
+
+        line:
+            "Hehe... I always look for the easiest path!"
+
+    }
+
+};
+
+/* ============================================================
+   ECE DOMAINS
 ============================================================ */
 
 const domains = [
@@ -84,23 +237,21 @@ const domains = [
         number: "01",
         icon: "🌱",
         title: "ECE Zero",
-        short: "Start from absolute zero.",
-        description:
-            "Electricity, charge, electrons, voltage, current, resistance, power and circuits.",
+        color: "#b7ff63",
         level: "BEGINNER",
-        color: "#b6ff63"
+        description:
+            "Start from electricity, charge, electrons, voltage and current."
     },
 
     {
-        id: "circuit-theory",
+        id: "circuits",
         number: "02",
         icon: "🔌",
         title: "Circuit Theory",
-        short: "Understand how circuits behave.",
+        color: "#46e7d1",
+        level: "FOUNDATION",
         description:
-            "Ohm's Law, KCL, KVL, series, parallel and network analysis.",
-        level: "BEGINNER → INTERMEDIATE",
-        color: "#45e9d3"
+            "Ohm's Law, KCL, KVL, series, parallel and network analysis."
     },
 
     {
@@ -108,11 +259,10 @@ const domains = [
         number: "03",
         icon: "🧩",
         title: "Component City",
-        short: "Meet the building blocks.",
+        color: "#ffd166",
+        level: "FOUNDATION",
         description:
-            "Resistors, capacitors, inductors, diodes, LEDs, transistors and more.",
-        level: "BEGINNER → INTERMEDIATE",
-        color: "#ffc661"
+            "Resistors, capacitors, inductors, diodes and transistors."
     },
 
     {
@@ -120,11 +270,10 @@ const domains = [
         number: "04",
         icon: "〽️",
         title: "Analog World",
-        short: "Understand real-world signals.",
-        description:
-            "Diodes, amplifiers, op-amps, filters, transistors and oscillators.",
+        color: "#ff75a8",
         level: "INTERMEDIATE",
-        color: "#ff7aae"
+        description:
+            "Amplifiers, op-amps, filters, oscillators and analog circuits."
     },
 
     {
@@ -132,11 +281,10 @@ const domains = [
         number: "05",
         icon: "01",
         title: "Digital World",
-        short: "Enter the world of 0s and 1s.",
-        description:
-            "Boolean logic, gates, K-maps, flip-flops, counters and memories.",
+        color: "#9b8cff",
         level: "INTERMEDIATE",
-        color: "#9b8cff"
+        description:
+            "Logic gates, Boolean algebra, K-maps, flip-flops and memory."
     },
 
     {
@@ -144,11 +292,10 @@ const domains = [
         number: "06",
         icon: "📡",
         title: "Signal City",
-        short: "Learn how information travels.",
+        color: "#46e7d1",
+        level: "INTERMEDIATE",
         description:
-            "Signals, Fourier, sampling, modulation, antennas and communication.",
-        level: "INTERMEDIATE → ADVANCED",
-        color: "#45e9d3"
+            "Signals, Fourier, sampling, modulation and communication."
     },
 
     {
@@ -156,11 +303,10 @@ const domains = [
         number: "07",
         icon: "🤖",
         title: "Embedded World",
-        short: "Make electronics intelligent.",
-        description:
-            "Microcontrollers, ARM, ESP32, sensors, protocols, RTOS and IoT.",
+        color: "#b7ff63",
         level: "ADVANCED",
-        color: "#b6ff63"
+        description:
+            "Microcontrollers, ARM, ESP32, sensors, protocols and IoT."
     },
 
     {
@@ -168,11 +314,10 @@ const domains = [
         number: "08",
         icon: "💻",
         title: "VLSI World",
-        short: "Build electronics at chip level.",
-        description:
-            "CMOS, RTL, Verilog, FPGA, ASIC, timing, synthesis and SoC.",
+        color: "#9b8cff",
         level: "ADVANCED",
-        color: "#9b8cff"
+        description:
+            "CMOS, RTL, Verilog, FPGA, ASIC, timing and SoC."
     },
 
     {
@@ -180,11 +325,10 @@ const domains = [
         number: "09",
         icon: "⚡",
         title: "Power World",
-        short: "Control and convert electrical power.",
-        description:
-            "Power devices, converters, inverters, SMPS, EVs and motor drives.",
+        color: "#ff776c",
         level: "ADVANCED",
-        color: "#ff806d"
+        description:
+            "Converters, inverters, SMPS, EV power and motor drives."
     }
 
 ];
@@ -195,302 +339,80 @@ const domains = [
 
 const roadmap = [
 
-    {
-        stage: "ECE ZERO",
-        description:
-            "Electricity → charge → electron → voltage → current → resistance",
-        level: "01",
-        color: "#b6ff63"
-    },
+    [
+        "01",
+        "ECE ZERO",
+        "Electricity → charge → electron → voltage → current",
+        "#b7ff63"
+    ],
 
-    {
-        stage: "BASIC CIRCUITS",
-        description:
-            "Sources → loads → symbols → wires → open/closed circuits",
-        level: "02",
-        color: "#b6ff63"
-    },
+    [
+        "02",
+        "BASIC CIRCUITS",
+        "Sources → loads → wires → symbols → open/closed circuits",
+        "#b7ff63"
+    ],
 
-    {
-        stage: "CIRCUIT THEORY",
-        description:
-            "Ohm's Law → KCL → KVL → series → parallel → networks",
-        level: "03",
-        color: "#45e9d3"
-    },
+    [
+        "03",
+        "CIRCUIT THEORY",
+        "Ohm's Law → KCL → KVL → series → parallel → networks",
+        "#46e7d1"
+    ],
 
-    {
-        stage: "COMPONENTS",
-        description:
-            "R → C → L → diode → LED → transistor → MOSFET",
-        level: "04",
-        color: "#ffc661"
-    },
+    [
+        "04",
+        "COMPONENTS",
+        "R → C → L → diode → LED → BJT → MOSFET",
+        "#ffd166"
+    ],
 
-    {
-        stage: "ANALOG",
-        description:
-            "Amplifiers → op-amps → filters → oscillators",
-        level: "05",
-        color: "#ff7aae"
-    },
+    [
+        "05",
+        "ANALOG",
+        "Amplifiers → op-amps → filters → oscillators",
+        "#ff75a8"
+    ],
 
-    {
-        stage: "DIGITAL",
-        description:
-            "Logic → Boolean → K-map → sequential logic → memory",
-        level: "06",
-        color: "#9b8cff"
-    },
+    [
+        "06",
+        "DIGITAL",
+        "Logic → Boolean → K-map → sequential logic → memory",
+        "#9b8cff"
+    ],
 
-    {
-        stage: "SIGNALS & COMMUNICATION",
-        description:
-            "Signals → Fourier → sampling → modulation → wireless",
-        level: "07",
-        color: "#45e9d3"
-    },
+    [
+        "07",
+        "SIGNALS",
+        "Fourier → sampling → modulation → communication",
+        "#46e7d1"
+    ],
 
-    {
-        stage: "EMBEDDED",
-        description:
-            "MCU → ARM → ESP32 → sensors → protocols → RTOS → IoT",
-        level: "08",
-        color: "#b6ff63"
-    },
+    [
+        "08",
+        "EMBEDDED",
+        "MCU → ARM → ESP32 → sensors → protocols → RTOS",
+        "#b7ff63"
+    ],
 
-    {
-        stage: "VLSI",
-        description:
-            "CMOS → RTL → Verilog → FPGA → ASIC → SoC",
-        level: "09",
-        color: "#9b8cff"
-    },
+    [
+        "09",
+        "VLSI",
+        "CMOS → RTL → Verilog → FPGA → ASIC → SoC",
+        "#9b8cff"
+    ],
 
-    {
-        stage: "POWER ELECTRONICS",
-        description:
-            "Converters → inverters → SMPS → EV → motor drives",
-        level: "10",
-        color: "#ff806d"
-    }
+    [
+        "10",
+        "POWER",
+        "Converters → inverters → SMPS → EV → motor drives",
+        "#ff776c"
+    ]
 
 ];
 
 /* ============================================================
-   BEGINNER TOPICS
-============================================================ */
-
-const beginnerTopics = [
-
-    {
-        id: "what-is-ece",
-        tag: "START HERE",
-        title: "What is ECE?",
-        description:
-            "Understand what Electronics and Communication Engineering actually covers."
-    },
-
-    {
-        id: "electricity",
-        tag: "ECE ZERO",
-        title: "What is Electricity?",
-        description:
-            "Start with the basic idea of electric charge and electrical energy."
-    },
-
-    {
-        id: "electron",
-        tag: "ECE ZERO",
-        title: "What is an Electron?",
-        description:
-            "Understand the tiny particle behind electrical current."
-    },
-
-    {
-        id: "voltage",
-        tag: "FUNDAMENTALS",
-        title: "Voltage",
-        description:
-            "The electrical potential difference that pushes charge."
-    },
-
-    {
-        id: "current",
-        tag: "FUNDAMENTALS",
-        title: "Current",
-        description:
-            "How electric charge flows through a circuit."
-    },
-
-    {
-        id: "resistance",
-        tag: "FUNDAMENTALS",
-        title: "Resistance",
-        description:
-            "Why materials oppose the movement of electrical charge."
-    },
-
-    {
-        id: "power",
-        tag: "FUNDAMENTALS",
-        title: "Electrical Power",
-        description:
-            "Understand how voltage and current create electrical power."
-    },
-
-    {
-        id: "ac-dc",
-        tag: "FUNDAMENTALS",
-        title: "AC vs DC",
-        description:
-            "Why wall power and batteries behave differently."
-    },
-
-    {
-        id: "ground",
-        tag: "FUNDAMENTALS",
-        title: "Ground",
-        description:
-            "What engineers mean when they say GND."
-    }
-
-];
-
-/* ============================================================
-   EVERYDAY ENGINEERING
-============================================================ */
-
-const everydayEngineering = [
-
-    {
-        icon: "📱",
-        title: "Smartphone",
-        description:
-            "Processors, sensors, RF communication, batteries, displays and power management."
-    },
-
-    {
-        icon: "🔋",
-        title: "Phone Charger",
-        description:
-            "AC-DC conversion, switching circuits, transformers and regulation."
-    },
-
-    {
-        icon: "💡",
-        title: "LED Bulb",
-        description:
-            "Diodes, current limiting, rectification and power electronics."
-    },
-
-    {
-        icon: "🚗",
-        title: "Modern Car",
-        description:
-            "ECUs, sensors, CAN bus, motor control, radar and embedded systems."
-    },
-
-    {
-        icon: "❄️",
-        title: "Air Conditioner",
-        description:
-            "Sensors, compressors, motor drives, control systems and power electronics."
-    },
-
-    {
-        icon: "📺",
-        title: "TV Remote",
-        description:
-            "Infrared LEDs, photodiodes and digital communication."
-    },
-
-    {
-        icon: "📍",
-        title: "GPS",
-        description:
-            "RF signals, satellites, antennas, timing and signal processing."
-    },
-
-    {
-        icon: "🎧",
-        title: "Wireless Earbuds",
-        description:
-            "Bluetooth, RF, ADC/DAC, amplifiers, microphones and battery management."
-    },
-
-    {
-        icon: "🚇",
-        title: "Metro System",
-        description:
-            "Power electronics, motors, signalling, sensors and communication."
-    },
-
-    {
-        icon: "🤖",
-        title: "Robot",
-        description:
-            "Microcontrollers, sensors, actuators, motor drivers and control algorithms."
-    },
-
-    {
-        icon: "📶",
-        title: "Wi-Fi",
-        description:
-            "RF communication, modulation, antennas, protocols and signal processing."
-    },
-
-    {
-        icon: "🏠",
-        title: "Smart Home",
-        description:
-            "Sensors, embedded systems, wireless communication and IoT."
-    }
-
-];
-
-/* ============================================================
-   CHARACTERS
-============================================================ */
-
-const characters = [
-
-    {
-        name: "Volto",
-        concept: "Voltage",
-        icon: "⚡",
-        description:
-            "The push that makes charge move."
-    },
-
-    {
-        name: "Curro",
-        concept: "Current",
-        icon: "🌊",
-        description:
-            "The flow of electric charge."
-    },
-
-    {
-        name: "Resi",
-        concept: "Resistance",
-        icon: "🧱",
-        description:
-            "The one who slows the current down."
-    },
-
-    {
-        name: "Shorty",
-        concept: "Short Circuit",
-        icon: "💥",
-        description:
-            "The troublemaker who finds the path of least resistance."
-    }
-
-];
-
-/* ============================================================
-   LESSON CONTENT
+   ECE ZERO LESSONS
 ============================================================ */
 
 const lessons = {
@@ -499,235 +421,271 @@ const lessons = {
 
         title: "What is ECE?",
 
+        eyebrow: "ECE ZERO · START HERE",
+
         subtitle:
-            "Electronics and Communication Engineering explained from zero.",
+            "Before learning circuits, understand the universe you're entering.",
 
-        sections: [
+        hook:
+            "How can the same engineering field create a phone, a satellite, a robot and an EV?",
 
-            {
-                title: "The simple idea",
+        mascot: "volto",
 
-                text:
-                    "ECE is the branch of engineering that deals with electronics, electrical signals, communication systems, embedded systems, digital systems, semiconductor devices and many technologies that make modern devices work."
-            },
+        mascotText:
+            "ECE isn't just about circuits da. It's the connection between electronics, signals, computing, communication and the physical world.",
 
-            {
-                title: "What will you learn?",
+        formula: null,
 
-                text:
-                    "You will start from electricity and basic circuits, then move into components, analog electronics, digital electronics, signals, communication, embedded systems, VLSI and power electronics."
-            },
+        visual: "universe",
 
-            {
-                title: "Think of ECE as a universe",
+        simple:
+            "Electronics and Communication Engineering is the engineering of electronic systems, signals, communication, embedded intelligence and the hardware that makes modern technology work.",
 
-                text:
-                    "A smartphone, car, robot, satellite, EV, medical device and IoT product may look completely different. But underneath, they use many of the same ECE building blocks."
-            }
+        engineer:
+            "ECE combines semiconductor devices, analog and digital circuits, signal processing, communication systems, embedded systems, computer architecture, VLSI and power electronics.",
 
-        ]
+        real:
+            "Your phone, Wi-Fi router, car, smartwatch, camera, charger, metro system and even many medical devices contain multiple ECE concepts.",
+
+        next: "electricity"
 
     },
 
-    "electricity": {
+    electricity: {
 
-        title: "What is Electricity?",
+        title: "Electricity",
+
+        eyebrow: "ECE ZERO · FOUNDATION",
 
         subtitle:
-            "Your first step into the ECE Universe.",
+            "Your first real step into electronics.",
 
-        sections: [
+        hook:
+            "What actually happens when you switch ON a device?",
 
-            {
-                title: "Simple explanation",
+        mascot: "curro",
 
-                text:
-                    "Electricity is associated with the presence and movement of electric charge."
-            },
+        mascotText:
+            "Electricity isn't some magical blue thing da. At the engineering level, we're dealing with electric charge and how it behaves.",
 
-            {
-                title: "Engineering view",
+        formula: null,
 
-                text:
-                    "Engineers work with electrical quantities such as voltage, current, resistance, power and energy to design systems that control and use electrical energy."
-            },
+        visual: "battery",
 
-            {
-                title: "Real life",
+        simple:
+            "Electricity is associated with electric charge and its movement or effects. Electrical systems use these effects to transfer and control energy.",
 
-                text:
-                    "When you charge your phone, electrical energy is transferred from the charger into the battery."
-            }
+        engineer:
+            "Electrical engineering works with quantities such as charge, current, voltage, power and energy to describe and design electrical systems.",
 
-        ]
+        real:
+            "When your phone is charging, electrical energy is transferred through an electrical system into chemical energy stored in the battery.",
+
+        next: "electron"
 
     },
 
-    "electron": {
+    electron: {
 
-        title: "What is an Electron?",
+        title: "Electron",
+
+        eyebrow: "ECE ZERO · ATOMIC LEVEL",
 
         subtitle:
-            "The tiny particle behind electrical behaviour.",
+            "Meet one of the tiny players behind electrical behaviour.",
 
-        sections: [
+        hook:
+            "If current is flowing... what is actually moving?",
 
-            {
-                title: "Simple explanation",
+        mascot: "curro",
 
-                text:
-                    "An electron is a subatomic particle carrying negative electric charge."
-            },
+        mascotText:
+            "In many conductive materials, my flow is associated with the movement of electrons. That's why I care about them!",
 
-            {
-                title: "Why ECE cares",
+        formula: null,
 
-                text:
-                    "The behaviour of electrons in materials is fundamental to electrical conduction and semiconductor electronics."
-            }
+        visual: "electron",
 
-        ]
+        simple:
+            "An electron is a subatomic particle with negative electric charge.",
+
+        engineer:
+            "The behaviour and movement of electrons in materials is fundamental to electrical conduction and semiconductor devices.",
+
+        real:
+            "Copper wires conduct electrical current efficiently because their material structure allows charge carriers to move relatively easily.",
+
+        next: "charge"
 
     },
 
-    "voltage": {
+    charge: {
+
+        title: "Electric Charge",
+
+        eyebrow: "ECE ZERO · FUNDAMENTALS",
+
+        subtitle:
+            "The property behind electrical interaction.",
+
+        hook:
+            "Why can two objects attract or repel electrically?",
+
+        mascot: "volto",
+
+        mascotText:
+            "Charge is one of the basic quantities of electricity. Think of it as the property that gives particles electrical behaviour.",
+
+        formula: "Q = I × t",
+
+        visual: "charge",
+
+        simple:
+            "Electric charge is a physical property associated with particles and is measured in coulombs.",
+
+        engineer:
+            "Current is the rate of flow of charge. This gives us the relationship Q = It.",
+
+        real:
+            "Whenever current flows through a wire, charge is being transferred through the circuit.",
+
+        next: "voltage"
+
+    },
+
+    voltage: {
 
         title: "Voltage",
 
+        eyebrow: "ECE ZERO · CORE CONCEPT",
+
         subtitle:
-            "The electrical potential difference.",
+            "Potential difference — the idea behind the electrical push.",
 
-        formula:
-            "V = W / Q",
+        hook:
+            "Why does a battery make current possible?",
 
-        sections: [
+        mascot: "volto",
 
-            {
-                title: "Simple explanation",
+        mascotText:
+            "That's literally my job! I create the potential difference that allows charge to move when a conducting path exists.",
 
-                text:
-                    "Voltage can be thought of as the electrical push or potential difference between two points."
-            },
+        formula: "V = W / Q",
 
-            {
-                title: "NCU analogy",
+        visual: "voltage",
 
-                text:
-                    "Imagine water stored at a higher level. The difference in height provides the potential for water to flow. Voltage is not literally water pressure, but the analogy helps build intuition."
-            },
+        simple:
+            "Voltage is the potential difference between two points.",
 
-            {
-                title: "Real life",
+        engineer:
+            "Voltage represents the difference in electric potential energy per unit charge between two points.",
 
-                text:
-                    "A common USB supply is around 5 V, while household electrical systems operate at much higher voltages."
-            }
+        real:
+            "A USB supply commonly provides around 5 V. Different electronic circuits require different voltage levels.",
 
-        ]
+        next: "current"
 
     },
 
-    "current": {
+    current: {
 
         title: "Current",
 
+        eyebrow: "ECE ZERO · CORE CONCEPT",
+
         subtitle:
-            "The flow of electric charge.",
+            "The rate at which electric charge flows.",
 
-        formula:
-            "I = Q / t",
+        hook:
+            "Voltage is the push. But what actually flows?",
 
-        sections: [
+        mascot: "curro",
 
-            {
-                title: "Simple explanation",
+        mascotText:
+            "Me! I'm Current. More precisely, I'm the rate at which electric charge passes through a point.",
 
-                text:
-                    "Electric current describes the rate at which electric charge flows through a point."
-            },
+        formula: "I = Q / t",
 
-            {
-                title: "Unit",
+        visual: "current",
 
-                text:
-                    "The SI unit of current is ampere, written as A."
-            },
+        simple:
+            "Current tells us how much electric charge flows per unit time.",
 
-            {
-                title: "NCU analogy",
+        engineer:
+            "The SI unit of current is the ampere. One ampere corresponds to one coulomb of charge passing a point per second.",
 
-                text:
-                    "If voltage is the push, current is the amount of charge flowing."
-            }
+        real:
+            "Your phone charger may supply a few amps depending on its voltage, charging mode and design.",
 
-        ]
+        next: "resistance"
 
     },
 
-    "resistance": {
+    resistance: {
 
         title: "Resistance",
 
+        eyebrow: "ECE ZERO · CORE CONCEPT",
+
         subtitle:
-            "The opposition to current flow.",
+            "Why doesn't current simply flow without limits?",
 
-        formula:
-            "R = V / I",
+        hook:
+            "What happens if we make it harder for charge to move?",
 
-        sections: [
+        mascot: "resi",
 
-            {
-                title: "Simple explanation",
+        mascotText:
+            "That's where I enter! Resistance represents opposition to current flow.",
 
-                text:
-                    "Resistance describes how strongly a component or material opposes current."
-            },
+        formula: "V = I × R",
 
-            {
-                title: "Unit",
+        visual: "resistance",
 
-                text:
-                    "The SI unit of resistance is ohm, represented by Ω."
-            },
+        simple:
+            "Resistance is the opposition a material or component presents to current.",
 
-            {
-                title: "Real life",
+        engineer:
+            "For an ideal resistor, voltage, current and resistance are related by Ohm's Law: V = IR.",
 
-                text:
-                    "Resistors are used to control current, divide voltage and protect components."
-            }
+        real:
+            "Resistors are used to limit current, divide voltage, set operating points and protect components.",
 
-        ]
+        next: "power"
 
     },
 
-    "power": {
+    power: {
 
         title: "Electrical Power",
+
+        eyebrow: "ECE ZERO · ENERGY IN ACTION",
 
         subtitle:
             "How quickly electrical energy is transferred.",
 
-        formula:
-            "P = V × I",
+        hook:
+            "Why does a 100 W appliance consume more power than a 5 W LED?",
 
-        sections: [
+        mascot: "volto",
 
-            {
-                title: "Simple explanation",
+        mascotText:
+            "Power tells you how quickly electrical energy is being transferred or converted.",
 
-                text:
-                    "Electrical power describes the rate at which electrical energy is transferred or converted."
-            },
+        formula: "P = V × I",
 
-            {
-                title: "Real life",
+        visual: "power",
 
-                text:
-                    "A 60 W lamp transfers energy at a rate of 60 joules per second under its rated operating conditions."
-            }
+        simple:
+            "Electrical power is the rate at which electrical energy is transferred or converted.",
 
-        ]
+        engineer:
+            "For a DC circuit under the appropriate conditions, power can be calculated as P = VI. For resistors, P = I²R = V²/R.",
+
+        real:
+            "Phone chargers, bulbs, motors, heaters and computers all have power ratings.",
+
+        next: "ac-dc"
 
     },
 
@@ -735,199 +693,1149 @@ const lessons = {
 
         title: "AC vs DC",
 
+        eyebrow: "ECE ZERO · POWER BASICS",
+
         subtitle:
-            "Two fundamental forms of electrical supply.",
+            "Two fundamental ways electrical current behaves.",
 
-        sections: [
+        hook:
+            "Why does a battery give DC while the wall socket gives AC?",
 
-            {
-                title: "DC",
+        mascot: "capa",
 
-                text:
-                    "Direct current has a current direction that remains constant in the idealised basic model. Batteries provide DC."
-            },
+        mascotText:
+            "DC tends to maintain one direction. AC periodically changes direction. Both are extremely important in engineering.",
 
-            {
-                title: "AC",
+        formula: null,
 
-                text:
-                    "Alternating current periodically changes direction. Household mains systems use AC."
-            },
+        visual: "acdc",
 
-            {
-                title: "Why convert them?",
+        simple:
+            "Direct current has a fixed direction in the basic ideal model. Alternating current periodically changes direction.",
 
-                text:
-                    "Electronic devices often need regulated DC internally, so power supplies convert electrical energy between different forms."
-            }
+        engineer:
+            "Power systems commonly use AC for distribution, while batteries and most electronic circuits internally use DC.",
 
-        ]
+        real:
+            "A phone charger takes AC from the mains and converts it into regulated DC suitable for the phone.",
+
+        next: "ground"
 
     },
 
-    "ground": {
+    ground: {
 
         title: "Ground",
+
+        eyebrow: "ECE ZERO · CIRCUIT REFERENCE",
 
         subtitle:
             "One of the most misunderstood words in electronics.",
 
-        sections: [
+        hook:
+            "Is ground always literally connected to Earth?",
 
-            {
-                title: "Simple explanation",
+        mascot: "resi",
 
-                text:
-                    "In a circuit, ground commonly provides a reference point for measuring voltages."
-            },
+        mascotText:
+            "Not necessarily! In circuit analysis, ground is often a reference point. Protective earth is a different concept.",
 
-            {
-                title: "Important",
+        formula: null,
 
-                text:
-                    "Circuit ground and protective earth are related concepts but are not automatically the same thing in every system."
-            }
+        visual: "ground",
 
-        ]
+        simple:
+            "Circuit ground is commonly used as a reference node for measuring voltages.",
+
+        engineer:
+            "A schematic's ground node establishes a common reference potential. Circuit ground and protective earth may be connected in some systems but are not universally identical.",
+
+        real:
+            "Microcontrollers, sensors and power supplies often share a circuit ground so their signals have a common reference.",
+
+        next: null
 
     }
 
 };
 
 /* ============================================================
-   UTILITIES
+   DOMAIN TOPICS
 ============================================================ */
 
-function escapeHTML(value) {
+const domainTopics = {
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    circuits: [
+        "Ohm's Law",
+        "KCL",
+        "KVL",
+        "Series Circuits",
+        "Parallel Circuits",
+        "Voltage Divider",
+        "Current Divider",
+        "Mesh Analysis",
+        "Nodal Analysis",
+        "Thevenin",
+        "Norton",
+        "Superposition"
+    ],
 
-}
+    components: [
+        "Resistor",
+        "Capacitor",
+        "Inductor",
+        "Potentiometer",
+        "Transformer",
+        "PN Junction",
+        "Zener Diode",
+        "LED",
+        "Photodiode",
+        "BJT",
+        "MOSFET",
+        "IGBT"
+    ],
 
-function getLevel(xp) {
+    analog: [
+        "Diode Circuits",
+        "Rectifiers",
+        "Clippers",
+        "Clampers",
+        "BJT Biasing",
+        "BJT Amplifier",
+        "MOSFET Amplifier",
+        "Op-Amp",
+        "Filters",
+        "Oscillators",
+        "Feedback"
+    ],
 
-    return Math.floor(xp / 100) + 1;
+    digital: [
+        "Number Systems",
+        "Boolean Algebra",
+        "Logic Gates",
+        "Universal Gates",
+        "K-Maps",
+        "Adders",
+        "Subtractors",
+        "MUX",
+        "DEMUX",
+        "Flip-Flops",
+        "Counters",
+        "Registers"
+    ],
 
-}
+    signals: [
+        "Continuous Signals",
+        "Discrete Signals",
+        "Amplitude",
+        "Frequency",
+        "Phase",
+        "Fourier Series",
+        "Fourier Transform",
+        "Sampling",
+        "Nyquist",
+        "AM",
+        "FM",
+        "PSK"
+    ],
 
-function updateHeaderXP() {
+    embedded: [
+        "Microcontrollers",
+        "Microprocessors",
+        "GPIO",
+        "ADC",
+        "DAC",
+        "PWM",
+        "Timers",
+        "Interrupts",
+        "UART",
+        "SPI",
+        "I2C",
+        "CAN",
+        "ARM",
+        "ESP32",
+        "RTOS",
+        "IoT"
+    ],
 
-    const xp = getXP();
+    vlsi: [
+        "Semiconductor Basics",
+        "MOSFET",
+        "CMOS",
+        "CMOS Inverter",
+        "RTL",
+        "Verilog",
+        "SystemVerilog",
+        "FPGA",
+        "ASIC",
+        "Synthesis",
+        "Timing",
+        "SoC"
+    ],
 
-    const element =
-        document.getElementById("headerXp");
+    power: [
+        "Power Diode",
+        "SCR",
+        "TRIAC",
+        "MOSFET",
+        "IGBT",
+        "Rectifier",
+        "Buck Converter",
+        "Boost Converter",
+        "Inverter",
+        "SMPS",
+        "Motor Drive",
+        "EV Power Electronics"
+    ]
 
-    if (element) {
-
-        element.textContent =
-            `${xp} XP`;
-
-    }
-
-}
+};
 
 /* ============================================================
-   COMPONENTS
+   EVERYDAY ENGINEERING
 ============================================================ */
 
-function domainCard(domain) {
+const everyday = [
+
+    {
+        id: "smartphone",
+        icon: "📱",
+        title: "Smartphone",
+        description:
+            "A pocket-sized combination of VLSI, sensors, RF, digital systems, power electronics and communication.",
+        tags: [
+            "VLSI",
+            "Sensors",
+            "RF",
+            "Digital",
+            "Power"
+        ],
+        intro:
+            "Your phone looks like one device. Inside, it is an entire ECE ecosystem.",
+        blocks: [
+            [
+                "SOC",
+                "The system-on-chip integrates processing, memory interfaces, graphics and many other functions."
+            ],
+            [
+                "DISPLAY",
+                "Digital data is converted into signals that control the display."
+            ],
+            [
+                "CAMERA",
+                "Image sensors convert incoming light into electrical signals that are processed digitally."
+            ],
+            [
+                "RF",
+                "Antennas and RF circuits allow communication over cellular, Wi-Fi and Bluetooth links."
+            ],
+            [
+                "POWER",
+                "Battery management and power regulation create the voltage rails needed by different circuits."
+            ],
+            [
+                "SENSORS",
+                "Accelerometers, gyroscopes, proximity sensors and other sensors interact with the physical world."
+            ]
+        ]
+    },
+
+    {
+        id: "charger",
+        icon: "🔌",
+        title: "Phone Charger",
+        description:
+            "AC-DC conversion, switching, regulation, protection and power management.",
+        tags: [
+            "Power",
+            "AC-DC",
+            "SMPS",
+            "Control"
+        ],
+        intro:
+            "That tiny box between the wall and your phone is a miniature power-electronics system.",
+        blocks: [
+            [
+                "INPUT",
+                "Mains AC enters the power supply."
+            ],
+            [
+                "RECTIFIER",
+                "A rectifier converts the AC waveform into a suitable DC form."
+            ],
+            [
+                "SWITCHING",
+                "High-frequency switching allows efficient energy conversion."
+            ],
+            [
+                "TRANSFORMER",
+                "Isolation and voltage conversion can be achieved using high-frequency magnetic components."
+            ],
+            [
+                "REGULATION",
+                "Feedback keeps the output within the required range."
+            ],
+            [
+                "PROTECTION",
+                "Protection circuits help handle abnormal operating conditions."
+            ]
+        ]
+    },
+
+    {
+        id: "car",
+        icon: "🚗",
+        title: "Modern Car",
+        description:
+            "An enormous embedded system containing sensors, ECUs, networks and power electronics.",
+        tags: [
+            "Embedded",
+            "CAN",
+            "Sensors",
+            "Control"
+        ],
+        intro:
+            "A modern car is no longer just mechanical. It is packed with computers.",
+        blocks: [
+            [
+                "ECUs",
+                "Electronic Control Units process sensor data and control vehicle functions."
+            ],
+            [
+                "CAN BUS",
+                "Vehicle controllers exchange information over communication networks."
+            ],
+            [
+                "SENSORS",
+                "Speed, temperature, pressure, position and many other quantities are measured."
+            ],
+            [
+                "MOTOR CONTROL",
+                "Electronic control systems manage motors, actuators and other mechanisms."
+            ],
+            [
+                "ADAS",
+                "Advanced systems combine sensors, computing and communication to support driving functions."
+            ],
+            [
+                "POWER",
+                "In EVs, power electronics control the flow of energy between battery and motor."
+            ]
+        ]
+    },
+
+    {
+        id: "ac",
+        icon: "❄️",
+        title: "Air Conditioner",
+        description:
+            "Sensors, control systems, motors and power electronics work together.",
+        tags: [
+            "Sensors",
+            "Control",
+            "Motors",
+            "Power"
+        ],
+        intro:
+            "The AC automatically maintains your desired temperature using feedback and control.",
+        blocks: [
+            [
+                "TEMPERATURE",
+                "Sensors measure environmental conditions."
+            ],
+            [
+                "CONTROLLER",
+                "A control system decides what action should happen."
+            ],
+            [
+                "COMPRESSOR",
+                "The compressor is driven by an electric motor."
+            ],
+            [
+                "INVERTER",
+                "Modern inverter systems can control motor speed efficiently."
+            ],
+            [
+                "FEEDBACK",
+                "Measured temperature is compared against the target."
+            ],
+            [
+                "PROTECTION",
+                "Electronic systems monitor abnormal conditions."
+            ]
+        ]
+    },
+
+    {
+        id: "remote",
+        icon: "📺",
+        title: "TV Remote",
+        description:
+            "A simple button press becomes an encoded infrared signal.",
+        tags: [
+            "Digital",
+            "IR",
+            "Communication",
+            "Sensor"
+        ],
+        intro:
+            "Your remote isn't shouting the command. It is transmitting coded light.",
+        blocks: [
+            [
+                "BUTTON",
+                "Pressing a button selects a command."
+            ],
+            [
+                "ENCODER",
+                "The command is represented as digital data."
+            ],
+            [
+                "IR LED",
+                "The transmitter converts the electrical signal into infrared light."
+            ],
+            [
+                "AIR",
+                "The infrared signal travels to the television."
+            ],
+            [
+                "RECEIVER",
+                "A photodetector receives the modulated signal."
+            ],
+            [
+                "DECODER",
+                "The TV interprets the command and performs the requested action."
+            ]
+        ]
+    },
+
+    {
+        id: "gps",
+        icon: "📍",
+        title: "GPS",
+        description:
+            "Satellites, RF signals, timing and signal processing combine to estimate position.",
+        tags: [
+            "RF",
+            "Signals",
+            "Timing",
+            "Communication"
+        ],
+        intro:
+            "Your phone doesn't have a tiny satellite inside it. It listens to signals from satellites.",
+        blocks: [
+            [
+                "SATELLITES",
+                "Satellites broadcast precisely timed signals."
+            ],
+            [
+                "ANTENNA",
+                "The receiver captures weak radio-frequency signals."
+            ],
+            [
+                "TIMING",
+                "Accurate timing information is critical."
+            ],
+            [
+                "PROCESSING",
+                "The receiver processes the received signals."
+            ],
+            [
+                "POSITION",
+                "Measurements from multiple satellites help estimate location."
+            ],
+            [
+                "MAP",
+                "The position is combined with mapping software to display your location."
+            ]
+        ]
+    },
+
+    {
+        id: "earbuds",
+        icon: "🎧",
+        title: "Wireless Earbuds",
+        description:
+            "Bluetooth, microphones, DACs, amplifiers, batteries and sensors.",
+        tags: [
+            "Bluetooth",
+            "Audio",
+            "ADC/DAC",
+            "Battery"
+        ],
+        intro:
+            "Those tiny earbuds contain an entire chain of signal processing.",
+        blocks: [
+            [
+                "BLUETOOTH",
+                "Digital audio data is received wirelessly."
+            ],
+            [
+                "DECODING",
+                "The received data is converted into usable audio information."
+            ],
+            [
+                "DAC",
+                "Digital samples are converted into an analog signal."
+            ],
+            [
+                "AMPLIFIER",
+                "The signal is amplified to drive the speaker."
+            ],
+            [
+                "SPEAKER",
+                "Electrical energy is converted into mechanical movement and sound."
+            ],
+            [
+                "BATTERY",
+                "Power management controls energy delivery and charging."
+            ]
+        ]
+    },
+
+    {
+        id: "robot",
+        icon: "🤖",
+        title: "Robot",
+        description:
+            "Sensors become inputs, algorithms become decisions and motors become action.",
+        tags: [
+            "Embedded",
+            "Sensors",
+            "Motors",
+            "Control"
+        ],
+        intro:
+            "A robot is basically an ECE feedback loop with a body.",
+        blocks: [
+            [
+                "SENSORS",
+                "The robot measures its environment."
+            ],
+            [
+                "MCU",
+                "A microcontroller processes sensor information."
+            ],
+            [
+                "DECISION",
+                "Software decides what action should happen."
+            ],
+            [
+                "DRIVER",
+                "Motor-driver electronics provide the required power."
+            ],
+            [
+                "ACTUATOR",
+                "Motors convert electrical energy into movement."
+            ],
+            [
+                "FEEDBACK",
+                "Sensors measure the result and the cycle repeats."
+            ]
+        ]
+    },
+
+    {
+        id: "wifi",
+        icon: "📶",
+        title: "Wi-Fi",
+        description:
+            "Radio-frequency electronics and digital communication make wireless networking possible.",
+        tags: [
+            "RF",
+            "Modulation",
+            "Antenna",
+            "Digital"
+        ],
+        intro:
+            "When you watch a video over Wi-Fi, bits are being carried through electromagnetic waves.",
+        blocks: [
+            [
+                "DATA",
+                "Digital information is represented as bits."
+            ],
+            [
+                "MODULATION",
+                "Information is mapped onto a radio-frequency signal."
+            ],
+            [
+                "RF",
+                "The signal is processed and transmitted at radio frequencies."
+            ],
+            [
+                "ANTENNA",
+                "Electrical signals are converted to electromagnetic waves."
+            ],
+            [
+                "RECEIVER",
+                "The receiving antenna captures the signal."
+            ],
+            [
+                "DEMODULATION",
+                "The receiver recovers the original information."
+            ]
+        ]
+    }
+
+];
+
+/* ============================================================
+   SVG VISUALS
+============================================================ */
+
+function svgBattery() {
 
     return `
-        <a
-            class="domain-card"
-            href="#/learn/${domain.id}"
-            style="--domain-color:${domain.color}"
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
         >
 
-            <div class="domain-number">
-                ${domain.number}
-            </div>
+            <path
+                class="circuit-wire"
+                d="M50 115 H95 M245 115 H290"
+            />
 
-            <div class="domain-icon">
-                ${domain.icon}
-            </div>
+            <line
+                x1="105"
+                y1="75"
+                x2="105"
+                y2="155"
+                stroke="#b7ff63"
+                stroke-width="8"
+            />
 
-            <h3>${domain.title}</h3>
+            <line
+                x1="125"
+                y1="88"
+                x2="125"
+                y2="142"
+                stroke="#b7ff63"
+                stroke-width="5"
+            />
 
-            <p>
-                ${domain.description}
-            </p>
+            <circle
+                class="circuit-node"
+                cx="50"
+                cy="115"
+                r="7"
+            />
 
-            <div class="domain-meta">
+            <circle
+                class="circuit-node"
+                cx="290"
+                cy="115"
+                r="7"
+            />
 
-                <span>
-                    ${domain.level}
-                </span>
+            <path
+                class="circuit-current"
+                d="M50 115 H95"
+            />
 
-                <span>
-                    Explore →
-                </span>
+            <text
+                x="95"
+                y="190"
+                fill="#a3afbd"
+                font-size="13"
+                font-family="monospace"
+            >
+                ENERGY SOURCE
+            </text>
 
-            </div>
-
-        </a>
+        </svg>
     `;
 
 }
 
-function roadmapItem(item) {
+function svgElectron() {
 
     return `
-        <div
-            class="roadmap-item"
-            style="--road-color:${item.color}"
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
         >
 
-            <div class="roadmap-dot"></div>
+            <circle
+                cx="170"
+                cy="115"
+                r="70"
+                fill="none"
+                stroke="#26384b"
+                stroke-width="2"
+            />
 
-            <div class="roadmap-content">
+            <circle
+                cx="170"
+                cy="115"
+                r="30"
+                fill="#9b8cff"
+                opacity=".25"
+            />
 
-                <strong>
-                    ${item.stage}
-                </strong>
+            <circle
+                cx="170"
+                cy="115"
+                r="10"
+                fill="#b7ff63"
+            />
 
-                <p>
-                    ${item.description}
-                </p>
+            <circle
+                cx="170"
+                cy="45"
+                r="9"
+                fill="#46e7d1"
+            />
 
-            </div>
+            <circle
+                cx="170"
+                cy="185"
+                r="9"
+                fill="#46e7d1"
+            />
 
-            <div class="roadmap-level">
-                LEVEL ${item.level}
-            </div>
+            <circle
+                cx="100"
+                cy="115"
+                r="9"
+                fill="#ff75a8"
+            />
 
-        </div>
+            <circle
+                cx="240"
+                cy="115"
+                r="9"
+                fill="#ff75a8"
+            />
+
+            <text
+                x="132"
+                y="119"
+                fill="#fff"
+                font-size="12"
+                font-family="monospace"
+            >
+                ATOM
+            </text>
+
+        </svg>
     `;
 
 }
 
-function topicCard(topic) {
+function svgCharge() {
 
     return `
-        <a
-            class="topic-card"
-            href="#/topic/${topic.id}"
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
         >
 
-            <span class="topic-tag">
-                ${topic.tag}
-            </span>
+            <circle
+                cx="110"
+                cy="115"
+                r="52"
+                fill="rgba(183,255,99,.08)"
+                stroke="#b7ff63"
+                stroke-width="2"
+            />
 
-            <h3>
-                ${topic.title}
-            </h3>
+            <text
+                x="94"
+                y="124"
+                fill="#b7ff63"
+                font-size="35"
+                font-family="sans-serif"
+            >
+                +
+            </text>
 
-            <p>
-                ${topic.description}
-            </p>
+            <circle
+                cx="230"
+                cy="115"
+                r="52"
+                fill="rgba(255,119,108,.08)"
+                stroke="#ff776c"
+                stroke-width="2"
+            />
 
-        </a>
+            <text
+                x="214"
+                y="124"
+                fill="#ff776c"
+                font-size="35"
+                font-family="sans-serif"
+            >
+                −
+            </text>
+
+            <path
+                class="circuit-current"
+                d="M155 115 H185"
+            />
+
+        </svg>
     `;
+
+}
+
+function svgVoltage() {
+
+    return `
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
+        >
+
+            <rect
+                x="55"
+                y="75"
+                width="230"
+                height="80"
+                rx="18"
+                fill="#101c29"
+                stroke="#29394b"
+            />
+
+            <line
+                x1="75"
+                y1="115"
+                x2="130"
+                y2="115"
+                stroke="#46e7d1"
+                stroke-width="5"
+            />
+
+            <line
+                x1="210"
+                y1="115"
+                x2="265"
+                y2="115"
+                stroke="#ff75a8"
+                stroke-width="5"
+            />
+
+            <text
+                x="105"
+                y="108"
+                fill="#46e7d1"
+                font-size="20"
+                font-family="monospace"
+            >
+                +
+            </text>
+
+            <text
+                x="225"
+                y="108"
+                fill="#ff75a8"
+                font-size="20"
+                font-family="monospace"
+            >
+                −
+            </text>
+
+            <text
+                x="142"
+                y="123"
+                fill="#b7ff63"
+                font-size="18"
+                font-family="monospace"
+            >
+                VOLT
+            </text>
+
+        </svg>
+    `;
+
+}
+
+function svgCurrent() {
+
+    return `
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
+        >
+
+            <path
+                d="M45 115 H295"
+                stroke="#26384b"
+                stroke-width="12"
+                stroke-linecap="round"
+            />
+
+            <path
+                class="circuit-current"
+                d="M45 115 H295"
+            />
+
+            <path
+                d="M270 95 L300 115 L270 135"
+                fill="none"
+                stroke="#b7ff63"
+                stroke-width="5"
+            />
+
+            <text
+                x="122"
+                y="75"
+                fill="#46e7d1"
+                font-size="16"
+                font-family="monospace"
+            >
+                CHARGE FLOW
+            </text>
+
+        </svg>
+    `;
+
+}
+
+function svgResistance() {
+
+    return `
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
+        >
+
+            <path
+                class="circuit-wire"
+                d="M30 115 H90"
+            />
+
+            <polyline
+                class="circuit-resistor"
+                points="
+                    90,115
+                    105,90
+                    120,140
+                    135,90
+                    150,140
+                    165,90
+                    180,140
+                    195,115
+                "
+            />
+
+            <path
+                class="circuit-wire"
+                d="M195 115 H310"
+            />
+
+            <text
+                x="122"
+                y="175"
+                fill="#ffd166"
+                font-size="16"
+                font-family="monospace"
+            >
+                RESISTANCE
+            </text>
+
+        </svg>
+    `;
+
+}
+
+function svgPower() {
+
+    return `
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
+        >
+
+            <circle
+                cx="170"
+                cy="110"
+                r="55"
+                fill="rgba(183,255,99,.08)"
+                stroke="#b7ff63"
+                stroke-width="2"
+            />
+
+            <text
+                x="145"
+                y="118"
+                fill="#b7ff63"
+                font-size="28"
+                font-family="monospace"
+            >
+                P
+            </text>
+
+            <path
+                class="circuit-current"
+                d="M80 110 H120"
+            />
+
+            <path
+                class="circuit-current"
+                d="M220 110 H260"
+            />
+
+            <text
+                x="135"
+                y="195"
+                fill="#a3afbd"
+                font-size="13"
+                font-family="monospace"
+            >
+                ENERGY / TIME
+            </text>
+
+        </svg>
+    `;
+
+}
+
+function svgACDC() {
+
+    return `
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
+        >
+
+            <path
+                d="M25 75
+                   C55 35,85 115,115 75
+                   S175 35,205 75
+                   S265 115,295 75"
+                fill="none"
+                stroke="#46e7d1"
+                stroke-width="4"
+            />
+
+            <line
+                x1="25"
+                y1="150"
+                x2="295"
+                y2="150"
+                stroke="#b7ff63"
+                stroke-width="4"
+            />
+
+            <text
+                x="30"
+                y="55"
+                fill="#46e7d1"
+                font-size="12"
+                font-family="monospace"
+            >
+                AC
+            </text>
+
+            <text
+                x="30"
+                y="180"
+                fill="#b7ff63"
+                font-size="12"
+                font-family="monospace"
+            >
+                DC
+            </text>
+
+        </svg>
+    `;
+
+}
+
+function svgGround() {
+
+    return `
+        <svg
+            class="circuit-svg"
+            viewBox="0 0 340 230"
+        >
+
+            <line
+                x1="170"
+                y1="45"
+                x2="170"
+                y2="145"
+                stroke="#46e7d1"
+                stroke-width="5"
+            />
+
+            <line
+                x1="120"
+                y1="145"
+                x2="220"
+                y2="145"
+                stroke="#b7ff63"
+                stroke-width="5"
+            />
+
+            <line
+                x1="135"
+                y1="158"
+                x2="205"
+                y2="158"
+                stroke="#b7ff63"
+                stroke-width="5"
+            />
+
+            <line
+                x1="150"
+                y1="171"
+                x2="190"
+                y2="171"
+                stroke="#b7ff63"
+                stroke-width="5"
+            />
+
+            <text
+                x="140"
+                y="205"
+                fill="#a3afbd"
+                font-size="13"
+                font-family="monospace"
+            >
+                GROUND
+            </text>
+
+        </svg>
+    `;
+
+}
+
+function visualFor(type) {
+
+    const visuals = {
+
+        battery: svgBattery,
+
+        electron: svgElectron,
+
+        charge: svgCharge,
+
+        voltage: svgVoltage,
+
+        current: svgCurrent,
+
+        resistance: svgResistance,
+
+        power: svgPower,
+
+        acdc: svgACDC,
+
+        ground: svgGround,
+
+        universe: () => `
+            <div style="
+                font-size:90px;
+                filter:drop-shadow(0 20px 30px rgba(183,255,99,.15))
+            ">
+                🌌
+            </div>
+        `
+
+    };
+
+    return visuals[type]
+        ? visuals[type]()
+        : "";
 
 }
 
@@ -943,98 +1851,97 @@ function renderHome() {
 
             <section class="hero">
 
-                <div class="hero-content">
+                <div>
 
                     <span class="eyebrow">
-                        NAMMA CIRCUIT UNIVERSE · DAY 1
+                        NAMMA CIRCUIT · ECE UNIVERSE
                     </span>
 
-                    <h1 class="hero-title">
-                        Learn ECE.
-                        <span class="accent">
-                            Build the universe.
+                    <h1>
+                        Electronics is not a subject.
+                        <span>
+                            It's a universe.
                         </span>
                     </h1>
 
-                    <p class="hero-description">
-                        From your first understanding of electricity
-                        to embedded systems, VLSI, communication and
-                        advanced electronics — learn everything inside
-                        one interactive ECE Universe.
+                    <p class="hero-copy">
+                        Start with your first electron.
+                        Meet the circuit crew.
+                        Experiment with concepts.
+                        Then discover where ECE is hiding
+                        inside the world around you.
                     </p>
 
                     <div class="hero-actions">
 
                         <a
                             href="#/learn"
-                            class="button button-primary"
+                            class="btn btn-primary"
                         >
-                            Start ECE from Zero →
+                            🚀 Start from Zero
                         </a>
 
                         <a
-                            href="#/universe"
-                            class="button button-secondary"
+                            href="#/everyday"
+                            class="btn"
                         >
-                            Explore Universe
+                            🌍 See ECE in Real Life
                         </a>
 
                     </div>
 
                     <div class="hero-stats">
 
-                        <div class="stat">
-                            <strong>10+</strong>
-                            <span>Learning stages</span>
+                        <div class="hero-stat">
+                            <strong>10</strong>
+                            <span>ECE stages</span>
                         </div>
 
-                        <div class="stat">
-                            <strong>1000+</strong>
-                            <span>Future concepts</span>
+                        <div class="hero-stat">
+                            <strong>7</strong>
+                            <span>NCU mascots</span>
                         </div>
 
-                        <div class="stat">
+                        <div class="hero-stat">
                             <strong>∞</strong>
-                            <span>Things to discover</span>
+                            <span>things to discover</span>
                         </div>
 
                     </div>
 
                 </div>
 
-                <div class="universe-visual">
+                <div class="universe-art">
 
-                    <div class="orbit">
+                    <div class="universe-ring"></div>
 
-                        <div class="core">
-                            ECE<br>
-                            UNIVERSE
-                        </div>
+                    <div class="universe-core">
+                        ECE<br>
+                        UNIVERSE
+                    </div>
 
-                        <div class="orbit-node node-1">
-                            ECE ZERO
-                        </div>
+                    <div class="orbit-mascot m1">
+                        ⚡
+                    </div>
 
-                        <div class="orbit-node node-2">
-                            DIGITAL
-                        </div>
+                    <div class="orbit-mascot m2">
+                        🌊
+                    </div>
 
-                        <div class="orbit-node node-3">
-                            EMBEDDED
-                        </div>
+                    <div class="orbit-mascot m3">
+                        🤖
+                    </div>
 
-                        <div class="orbit-node node-4">
-                            ANALOG
-                        </div>
+                    <div class="orbit-mascot m4">
+                        🧱
+                    </div>
 
-                        <div class="orbit-node node-5">
-                            VLSI
-                        </div>
+                    <div class="orbit-mascot m5">
+                        💻
+                    </div>
 
-                        <div class="orbit-node node-6">
-                            POWER
-                        </div>
-
+                    <div class="orbit-mascot m6">
+                        ⚡
                     </div>
 
                 </div>
@@ -1047,30 +1954,66 @@ function renderHome() {
 
             <div class="page">
 
-                <div class="section-header">
+                <div class="section-head">
 
                     <div>
+
                         <span class="eyebrow">
-                            THE UNIVERSE
+                            THE WORLDS
                         </span>
 
                         <h2>
-                            Every major ECE world.
+                            Enter the ECE Universe.
                         </h2>
+
                     </div>
 
                     <p>
-                        ECE isn't one subject. It's a connected universe
-                        of electronics, signals, computing, communication,
-                        embedded systems and hardware.
+                        Every major ECE domain becomes its own
+                        world — connected by the concepts you learn.
                     </p>
 
                 </div>
 
                 <div class="domain-grid">
 
-                    ${domains
-                        .map(domainCard)
+                    ${domains.map(domainCard).join("")}
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <div class="page">
+
+                <div class="section-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            CIRCUIT CREW
+                        </span>
+
+                        <h2>
+                            Your teachers are characters.
+                        </h2>
+
+                    </div>
+
+                    <p>
+                        Instead of throwing textbook paragraphs at you,
+                        NCU characters explain the ideas.
+                    </p>
+
+                </div>
+
+                <div class="mascot-grid">
+
+                    ${Object.values(mascots)
+                        .map(mascotCard)
                         .join("")}
 
                 </div>
@@ -1083,21 +2026,23 @@ function renderHome() {
 
             <div class="page">
 
-                <div class="section-header">
+                <div class="section-head">
 
                     <div>
+
                         <span class="eyebrow">
-                            LEARNING ROADMAP
+                            ROADMAP
                         </span>
 
                         <h2>
                             Zero → Advanced.
                         </h2>
+
                     </div>
 
                     <p>
-                        Follow the path in order or jump into any
-                        world when you're ready.
+                        Learn in order or jump into any world.
+                        The universe will keep expanding.
                     </p>
 
                 </div>
@@ -1105,7 +2050,38 @@ function renderHome() {
                 <div class="roadmap">
 
                     ${roadmap
-                        .map(roadmapItem)
+                        .map(
+                            ([number,title,text,color]) => `
+
+                            <div
+                                class="road"
+                                style="--road-color:${color}"
+                            >
+
+                                <div class="road-icon">
+                                    ${number}
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        ${title}
+                                    </strong>
+
+                                    <p>
+                                        ${text}
+                                    </p>
+
+                                </div>
+
+                                <div class="road-level">
+                                    →
+                                </div>
+
+                            </div>
+
+                        `
+                        )
                         .join("")}
 
                 </div>
@@ -1118,55 +2094,7 @@ function renderHome() {
 
             <div class="page">
 
-                <div class="path-panel">
-
-                    <span class="eyebrow">
-                        YOUR JOURNEY
-                    </span>
-
-                    <h2>
-                        Start with ECE Zero.
-                    </h2>
-
-                    <p class="lead">
-                        Don't worry if you don't remember your school
-                        physics or electronics. NCU starts from the
-                        smallest building blocks.
-                    </p>
-
-                    <div class="path-progress">
-                        <span></span>
-                    </div>
-
-                    <div class="hero-actions">
-
-                        <a
-                            href="#/learn"
-                            class="button button-primary"
-                        >
-                            Begin Learning
-                        </a>
-
-                        <a
-                            href="#/progress"
-                            class="button"
-                        >
-                            View Progress
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section class="section">
-
-            <div class="page">
-
-                <div class="section-header">
+                <div class="section-head">
 
                     <div>
 
@@ -1175,44 +2103,25 @@ function renderHome() {
                         </span>
 
                         <h2>
+                            Look around.
                             ECE is everywhere.
                         </h2>
 
                     </div>
 
                     <p>
-                        Learn a concept and then discover where it
-                        actually appears in the world around you.
+                        Don't just learn a component.
+                        Discover where it is hiding inside
+                        the devices you use every day.
                     </p>
 
                 </div>
 
                 <div class="everyday-grid">
 
-                    ${everydayEngineering
-                        .slice(0, 8)
-                        .map(item => `
-
-                            <a
-                                href="#/everyday"
-                                class="everyday-card"
-                            >
-
-                                <div class="emoji">
-                                    ${item.icon}
-                                </div>
-
-                                <h3>
-                                    ${item.title}
-                                </h3>
-
-                                <p>
-                                    ${item.description}
-                                </p>
-
-                            </a>
-
-                        `)
+                    ${everyday
+                        .slice(0,6)
+                        .map(everydayCard)
                         .join("")}
 
                 </div>
@@ -1221,7 +2130,7 @@ function renderHome() {
 
                     <a
                         href="#/everyday"
-                        class="button"
+                        class="btn btn-primary"
                     >
                         Explore Everyday Engineering →
                     </a>
@@ -1237,7 +2146,131 @@ function renderHome() {
 }
 
 /* ============================================================
-   UNIVERSE PAGE
+   CARDS
+============================================================ */
+
+function domainCard(domain) {
+
+    return `
+
+        <a
+            href="#/learn/${domain.id}"
+            class="domain"
+            style="--domain-color:${domain.color}"
+        >
+
+            <div class="domain-number">
+                ${domain.number}
+            </div>
+
+            <div class="domain-icon">
+                ${domain.icon}
+            </div>
+
+            <h3>
+                ${domain.title}
+            </h3>
+
+            <p>
+                ${domain.description}
+            </p>
+
+            <div class="domain-meta">
+
+                <span>
+                    ${domain.level}
+                </span>
+
+                <span>
+                    EXPLORE →
+                </span>
+
+            </div>
+
+        </a>
+
+    `;
+
+}
+
+function mascotCard(m) {
+
+    return `
+
+        <a
+            href="#/characters"
+            class="mascot-card"
+        >
+
+            <div class="mascot-avatar">
+                ${m.emoji}
+            </div>
+
+            <strong>
+                ${m.name}
+            </strong>
+
+            <span>
+                ${m.concept}
+            </span>
+
+        </a>
+
+    `;
+
+}
+
+function everydayCard(item) {
+
+    return `
+
+        <a
+            href="#/everyday/${item.id}"
+            class="everyday-card"
+        >
+
+            <div class="everyday-image">
+
+                <div class="everyday-icon">
+                    ${item.icon}
+                </div>
+
+            </div>
+
+            <div class="everyday-info">
+
+                <h3>
+                    ${item.title}
+                </h3>
+
+                <p>
+                    ${item.description}
+                </p>
+
+                <div class="ece-tags">
+
+                    ${item.tags
+                        .map(
+                            tag => `
+                                <span class="ece-tag">
+                                    ${tag}
+                                </span>
+                            `
+                        )
+                        .join("")}
+
+                </div>
+
+            </div>
+
+        </a>
+
+    `;
+
+}
+
+/* ============================================================
+   UNIVERSE
 ============================================================ */
 
 function renderUniverse() {
@@ -1246,21 +2279,20 @@ function renderUniverse() {
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
-                    🌌 NAMMA CIRCUIT UNIVERSE
+                    🌌 ECE UNIVERSE
                 </span>
 
                 <h1>
-                    One universe.
-                    <br>
-                    Every ECE world.
+                    Choose your world.
                 </h1>
 
                 <p>
-                    Explore electronics from absolute beginner concepts
-                    to advanced engineering domains.
+                    ECE is a connected system.
+                    Learn one world and you'll start recognising
+                    its concepts everywhere else.
                 </p>
 
             </section>
@@ -1269,37 +2301,7 @@ function renderUniverse() {
 
                 <div class="domain-grid">
 
-                    ${domains
-                        .map(domainCard)
-                        .join("")}
-
-                </div>
-
-            </section>
-
-            <section class="section">
-
-                <div class="section-header">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            THE COMPLETE PATH
-                        </span>
-
-                        <h2>
-                            Your ECE roadmap.
-                        </h2>
-
-                    </div>
-
-                </div>
-
-                <div class="roadmap">
-
-                    ${roadmap
-                        .map(roadmapItem)
-                        .join("")}
+                    ${domains.map(domainCard).join("")}
 
                 </div>
 
@@ -1312,109 +2314,95 @@ function renderUniverse() {
 }
 
 /* ============================================================
-   LEARN PAGE
+   LEARN
 ============================================================ */
 
 function renderLearn() {
 
+    const ids =
+        Object.keys(lessons);
+
     const completed =
         getCompleted();
 
-    const completedCount =
-        completed.length;
+    const progress =
+        Math.round(
+            (
+                completed.filter(
+                    id => ids.includes(id)
+                ).length /
+                ids.length
+            ) * 100
+        );
 
     return `
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
-                    📚 ECE LEARNING SYSTEM
+                    📚 ECE ZERO
                 </span>
 
                 <h1>
-                    Start from zero.
+                    Start from nothing.
                 </h1>
 
                 <p>
-                    No prerequisites. No assumptions.
-                    Build your electronics knowledge one concept at a time.
+                    No assumptions.
+                    No "you should already know this."
+                    We build the foundation one idea at a time.
                 </p>
+
+                <div style="margin-top:25px">
+
+                    <div class="muted">
+                        ECE Zero progress · ${progress}%
+                    </div>
+
+                    <div class="progress-bar">
+                        <span style="width:${progress}%"></span>
+                    </div>
+
+                </div>
 
             </section>
 
             <section class="section-small">
 
-                <div class="path-panel">
-
-                    <span class="eyebrow">
-                        YOUR PROGRESS
-                    </span>
-
-                    <h3>
-                        ${completedCount}
-                        concepts completed
-                    </h3>
-
-                    <p class="muted">
-                        Complete lessons to earn XP.
-                    </p>
-
-                </div>
-
-            </section>
-
-            <section class="section">
-
-                <div class="section-header">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            ECE ZERO
-                        </span>
-
-                        <h2>
-                            Your first concepts.
-                        </h2>
-
-                    </div>
-
-                </div>
-
                 <div class="topic-grid">
 
-                    ${beginnerTopics
-                        .map(topicCard)
-                        .join("")}
+                    ${Object.entries(lessons)
+                        .map(
+                            ([id, lesson], index) => `
 
-                </div>
+                            <a
+                                class="topic"
+                                href="#/topic/${id}"
+                            >
 
-            </section>
+                                <span class="topic-tag">
+                                    ${String(index + 1).padStart(2,"0")}
+                                    · ${lesson.eyebrow.split("·")[0]}
+                                </span>
 
-            <section class="section">
+                                <h3>
+                                    ${lesson.title}
+                                </h3>
 
-                <div class="section-header">
+                                <p>
+                                    ${lesson.subtitle}
+                                </p>
 
-                    <div>
+                                <span class="topic-arrow">
+                                    ENTER LESSON →
+                                </span>
 
-                        <span class="eyebrow">
-                            LEARNING WORLDS
-                        </span>
+                            </a>
 
-                        <h2>
-                            Where do you want to go next?
-                        </h2>
-
-                    </div>
-
-                </div>
-
-                <div class="domain-grid">
-
-                    ${domains
-                        .map(domainCard)
+                        `
+                        )
                         .join("")}
 
                 </div>
@@ -1428,14 +2416,20 @@ function renderLearn() {
 }
 
 /* ============================================================
-   DOMAIN PAGE
+   DOMAIN
 ============================================================ */
 
 function renderDomain(id) {
 
+    if (id === "ece-zero") {
+
+        return renderLearn();
+
+    }
+
     const domain =
         domains.find(
-            item => item.id === id
+            d => d.id === id
         );
 
     if (!domain) {
@@ -1444,148 +2438,6 @@ function renderDomain(id) {
 
     }
 
-    const domainTopics = {
-
-        "ece-zero": [
-            "Electricity",
-            "Electron",
-            "Charge",
-            "Voltage",
-            "Current",
-            "Resistance",
-            "Power",
-            "Energy",
-            "AC vs DC",
-            "Ground",
-            "Conductors",
-            "Insulators"
-        ],
-
-        "circuit-theory": [
-            "Ohm's Law",
-            "KCL",
-            "KVL",
-            "Series Circuits",
-            "Parallel Circuits",
-            "Voltage Divider",
-            "Current Divider",
-            "Mesh Analysis",
-            "Nodal Analysis",
-            "Thevenin",
-            "Norton",
-            "Superposition"
-        ],
-
-        "components": [
-            "Resistor",
-            "Capacitor",
-            "Inductor",
-            "Potentiometer",
-            "Transformer",
-            "PN Junction Diode",
-            "Zener Diode",
-            "LED",
-            "Photodiode",
-            "BJT",
-            "MOSFET",
-            "IGBT"
-        ],
-
-        "analog": [
-            "Diode Circuits",
-            "Rectifiers",
-            "Clippers",
-            "Clampers",
-            "BJT Biasing",
-            "BJT Amplifiers",
-            "MOSFET Amplifiers",
-            "Op-Amp",
-            "Filters",
-            "Oscillators",
-            "Feedback"
-        ],
-
-        "digital": [
-            "Number Systems",
-            "Boolean Algebra",
-            "Logic Gates",
-            "Universal Gates",
-            "K-Maps",
-            "Adders",
-            "Subtractors",
-            "MUX",
-            "DEMUX",
-            "Flip-Flops",
-            "Counters",
-            "Registers"
-        ],
-
-        "signals": [
-            "Signals",
-            "Continuous vs Discrete",
-            "Amplitude",
-            "Frequency",
-            "Phase",
-            "Fourier Series",
-            "Fourier Transform",
-            "Sampling",
-            "Nyquist",
-            "AM",
-            "FM",
-            "Digital Modulation"
-        ],
-
-        "embedded": [
-            "Microcontrollers",
-            "Microprocessors",
-            "GPIO",
-            "ADC",
-            "DAC",
-            "PWM",
-            "Timers",
-            "Interrupts",
-            "UART",
-            "SPI",
-            "I2C",
-            "CAN",
-            "ARM",
-            "ESP32",
-            "RTOS",
-            "IoT"
-        ],
-
-        "vlsi": [
-            "Semiconductors",
-            "MOSFET Basics",
-            "CMOS",
-            "CMOS Inverter",
-            "RTL",
-            "Verilog",
-            "SystemVerilog",
-            "FPGA",
-            "ASIC",
-            "Synthesis",
-            "Timing",
-            "SoC"
-        ],
-
-        "power": [
-            "Power Diodes",
-            "SCR",
-            "TRIAC",
-            "MOSFET",
-            "IGBT",
-            "Rectifiers",
-            "Buck Converter",
-            "Boost Converter",
-            "Inverter",
-            "SMPS",
-            "Motor Drives",
-            "EV Power Electronics"
-        ]
-
-    };
-
     const topics =
         domainTopics[id] || [];
 
@@ -1593,10 +2445,12 @@ function renderDomain(id) {
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
-                    ${domain.number} · ${domain.level}
+                    ${domain.number}
+                    ·
+                    ${domain.level}
                 </span>
 
                 <h1>
@@ -1615,12 +2469,13 @@ function renderDomain(id) {
                 <div class="topic-grid">
 
                     ${topics
-                        .map(topic => `
+                        .map(
+                            (topic,index) => `
 
-                            <div class="topic-card">
+                            <div class="topic">
 
                                 <span class="topic-tag">
-                                    ${domain.title}
+                                    ${String(index+1).padStart(2,"0")}
                                 </span>
 
                                 <h3>
@@ -1628,14 +2483,18 @@ function renderDomain(id) {
                                 </h3>
 
                                 <p>
-                                    This concept will be expanded
-                                    with explanation, formulas,
-                                    examples, labs and quizzes.
+                                    This concept is part of the
+                                    ${domain.title} learning path.
                                 </p>
+
+                                <span class="topic-arrow">
+                                    CONTENT EXPANSION →
+                                </span>
 
                             </div>
 
-                        `)
+                        `
+                        )
                         .join("")}
 
                 </div>
@@ -1649,7 +2508,7 @@ function renderDomain(id) {
 }
 
 /* ============================================================
-   TOPIC DETAIL
+   LESSON PAGE
 ============================================================ */
 
 function renderTopic(id) {
@@ -1659,49 +2518,27 @@ function renderTopic(id) {
 
     if (!lesson) {
 
-        return `
-
-            <div class="page">
-
-                <div class="empty-state">
-
-                    <span class="eyebrow">
-                        ECE UNIVERSE
-                    </span>
-
-                    <h2>
-                        Topic coming soon.
-                    </h2>
-
-                    <p>
-                        This concept is already part of the
-                        roadmap and will be expanded during
-                        the upcoming content build.
-                    </p>
-
-                    <a
-                        href="#/learn"
-                        class="button button-primary"
-                    >
-                        Back to Learning
-                    </a>
-
-                </div>
-
-            </div>
-
-        `;
+        return renderNotFound();
 
     }
+
+    const mascot =
+        mascots[
+            lesson.mascot
+        ];
+
+    const completed =
+        getCompleted()
+            .includes(id);
 
     return `
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
-                    ECE ZERO · LESSON
+                    ${lesson.eyebrow}
                 </span>
 
                 <h1>
@@ -1714,92 +2551,387 @@ function renderTopic(id) {
 
             </section>
 
-            <div class="detail-layout">
+            <div class="lesson-layout">
 
-                <article class="lesson-content">
+                <main class="lesson-main">
 
-                    ${lesson.sections
-                        .map(section => `
+                    <!-- HOOK -->
 
-                            <section class="lesson-block">
+                    <section class="lesson-card lesson-hook">
 
-                                <h3>
-                                    ${section.title}
-                                </h3>
+                        <div>
+
+                            <span class="eyebrow">
+                                ⚡ THE HOOK
+                            </span>
+
+                            <div class="hook-question">
+                                ${lesson.hook}
+                            </div>
+
+                        </div>
+
+                        <div class="lesson-visual">
+
+                            ${visualFor(
+                                lesson.visual
+                            )}
+
+                        </div>
+
+                    </section>
+
+                    <!-- SIMPLE -->
+
+                    <section class="lesson-card">
+
+                        <span class="eyebrow">
+                            🧠 SIMPLE MODE
+                        </span>
+
+                        <h2>
+                            Understand it first.
+                        </h2>
+
+                        <p>
+                            ${lesson.simple}
+                        </p>
+
+                    </section>
+
+                    <!-- MASCOT -->
+
+                    <section class="lesson-card">
+
+                        <span class="eyebrow">
+                            👾 NCU MODE
+                        </span>
+
+                        <div
+                            class="mascot-dialogue"
+                            style="margin-top:20px"
+                        >
+
+                            <div class="dialogue-avatar">
+                                ${mascot.emoji}
+                            </div>
+
+                            <div class="dialogue-bubble">
+
+                                <strong>
+                                    ${mascot.name}
+                                    ·
+                                    ${mascot.concept}
+                                </strong>
 
                                 <p>
-                                    ${section.text}
+                                    "${lesson.mascotText}"
                                 </p>
 
-                            </section>
+                            </div>
 
-                        `)
-                        .join("")}
+                        </div>
+
+                    </section>
+
+                    <!-- ENGINEER -->
+
+                    <section class="lesson-card">
+
+                        <span class="eyebrow">
+                            ⚙ ENGINEER MODE
+                        </span>
+
+                        <h2>
+                            Now let's make it technical.
+                        </h2>
+
+                        <p>
+                            ${lesson.engineer}
+                        </p>
+
+                    </section>
+
+                    <!-- FORMULA -->
 
                     ${
                         lesson.formula
                             ? `
-                                <section class="lesson-block">
 
-                                    <h3>
-                                        Engineering Formula
-                                    </h3>
+                                <section class="lesson-card">
 
-                                    <div class="formula">
-                                        ${lesson.formula}
+                                    <span class="eyebrow">
+                                        📐 FORMULA
+                                    </span>
+
+                                    <div class="formula-box">
+
+                                        <div class="formula">
+                                            ${lesson.formula}
+                                        </div>
+
                                     </div>
 
                                 </section>
+
                             `
                             : ""
                     }
 
-                    <section class="lesson-block">
+                    <!-- REAL WORLD -->
 
-                        <h3>
-                            Quick Check
-                        </h3>
+                    <section class="lesson-card">
+
+                        <span class="eyebrow">
+                            🌍 REAL WORLD
+                        </span>
+
+                        <h2>
+                            Where will you find it?
+                        </h2>
 
                         <p>
-                            After understanding this concept,
-                            try explaining it in your own words.
+                            ${lesson.real}
                         </p>
 
-                        <div class="hero-actions">
+                    </section>
+
+                    <!-- EXPERIMENT -->
+
+                    <section class="lesson-card experiment">
+
+                        <span class="eyebrow">
+                            🧪 MINI EXPERIMENT
+                        </span>
+
+                        <h2>
+                            Don't just read it.
+                            Change it.
+                        </h2>
+
+                        <div class="experiment-grid">
+
+                            <div class="controls">
+
+                                <div class="control-row">
+
+                                    <label>
+
+                                        <span>
+                                            Voltage
+                                        </span>
+
+                                        <strong
+                                            id="voltageValue"
+                                        >
+                                            5 V
+                                        </strong>
+
+                                    </label>
+
+                                    <input
+                                        id="voltageSlider"
+                                        type="range"
+                                        min="1"
+                                        max="24"
+                                        value="5"
+                                    >
+
+                                </div>
+
+                                <div class="control-row">
+
+                                    <label>
+
+                                        <span>
+                                            Resistance
+                                        </span>
+
+                                        <strong
+                                            id="resistanceValue"
+                                        >
+                                            100 Ω
+                                        </strong>
+
+                                    </label>
+
+                                    <input
+                                        id="resistanceSlider"
+                                        type="range"
+                                        min="10"
+                                        max="1000"
+                                        value="100"
+                                    >
+
+                                </div>
+
+                                <div class="value-box">
+
+                                    Current:
+                                    <strong id="currentValue">
+                                        50 mA
+                                    </strong>
+
+                                </div>
+
+                                <div class="value-box">
+
+                                    Power:
+                                    <strong id="experimentPower">
+                                        0.25 W
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div
+                                class="circuit-screen"
+                                id="circuitScreen"
+                            >
+
+                                ${svgResistance()}
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <!-- QUICK CHECK -->
+
+                    <section class="lesson-card">
+
+                        <span class="eyebrow">
+                            ❓ QUICK CHECK
+                        </span>
+
+                        <h2>
+                            One question before you leave.
+                        </h2>
+
+                        <p>
+                            If voltage stays constant and resistance
+                            increases, what happens to current?
+                        </p>
+
+                        <div
+                            class="quiz-options"
+                            id="lessonQuiz"
+                        >
 
                             <button
-                                class="button button-primary"
-                                data-complete-topic="${id}"
+                                class="quiz-option"
+                                data-correct="false"
                             >
-                                ✓ Mark as Learned
+                                It increases
+                            </button>
+
+                            <button
+                                class="quiz-option"
+                                data-correct="true"
+                            >
+                                It decreases
+                            </button>
+
+                            <button
+                                class="quiz-option"
+                                data-correct="false"
+                            >
+                                It becomes zero always
                             </button>
 
                         </div>
 
                     </section>
 
-                </article>
+                    <!-- COMPLETE -->
 
-                <aside class="sidebar">
+                    <section class="lesson-card">
+
+                        <span class="eyebrow">
+                            🚀 YOUR JOURNEY
+                        </span>
+
+                        <h2>
+                            ${completed
+                                ? "Concept completed! ⚡"
+                                : "Lock this concept in."
+                            }
+                        </h2>
+
+                        <p>
+                            ${
+                                completed
+                                ? "You've already earned XP for this concept."
+                                : "Mark the concept as learned to earn 25 XP."
+                            }
+                        </p>
+
+                        <div class="hero-actions">
+
+                            <button
+                                class="btn btn-primary"
+                                data-complete="${id}"
+                                ${completed ? "disabled" : ""}
+                            >
+                                ${
+                                    completed
+                                    ? "✓ Learned"
+                                    : "✓ Mark as Learned · +25 XP"
+                                }
+                            </button>
+
+                            ${
+                                lesson.next
+                                ? `
+                                    <a
+                                        class="btn"
+                                        href="#/topic/${lesson.next}"
+                                    >
+                                        Next Concept →
+                                    </a>
+                                `
+                                : `
+                                    <a
+                                        class="btn"
+                                        href="#/learn"
+                                    >
+                                        Back to ECE Zero
+                                    </a>
+                                `
+                            }
+
+                        </div>
+
+                    </section>
+
+                </main>
+
+                <aside class="lesson-sidebar">
 
                     <span class="eyebrow">
-                        ECE PATH
+                        ECE ZERO
                     </span>
 
                     <a href="#/learn">
-                        ← Back to ECE Zero
+                        ← All ECE Zero
                     </a>
 
                     <a href="#/universe">
-                        Explore Universe
+                        🌌 Universe
                     </a>
 
                     <a href="#/everyday">
-                        Find it in real life
+                        🌍 Real World
+                    </a>
+
+                    <a href="#/characters">
+                        👾 Circuit Crew
                     </a>
 
                     <a href="#/lab">
-                        Try NCU Lab
+                        🧪 NCU Lab
                     </a>
 
                 </aside>
@@ -1813,7 +2945,7 @@ function renderTopic(id) {
 }
 
 /* ============================================================
-   EVERYDAY PAGE
+   EVERYDAY LIST
 ============================================================ */
 
 function renderEveryday() {
@@ -1822,7 +2954,7 @@ function renderEveryday() {
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
                     🌍 ENGINEERING IN EVERYDAY LIFE
@@ -1835,8 +2967,9 @@ function renderEveryday() {
                 </h1>
 
                 <p>
-                    The fastest way to understand engineering
-                    is to connect theory with things you already use.
+                    Pick something you use every day.
+                    We'll break it down into the engineering
+                    concepts hiding underneath.
                 </p>
 
             </section>
@@ -1845,26 +2978,132 @@ function renderEveryday() {
 
                 <div class="everyday-grid">
 
-                    ${everydayEngineering
-                        .map(item => `
+                    ${everyday
+                        .map(everydayCard)
+                        .join("")}
 
-                            <article class="everyday-card">
+                </div>
 
-                                <div class="emoji">
-                                    ${item.icon}
-                                </div>
+            </section>
+
+        </div>
+
+    `;
+
+}
+
+/* ============================================================
+   EVERYDAY DETAIL
+============================================================ */
+
+function renderEverydayDetail(id) {
+
+    const item =
+        everyday.find(
+            x => x.id === id
+        );
+
+    if (!item) {
+
+        return renderNotFound();
+
+    }
+
+    return `
+
+        <div class="page">
+
+            <section class="real-life-hero">
+
+                <span class="eyebrow">
+                    🌍 ENGINEERING IN EVERYDAY LIFE
+                </span>
+
+                <h1>
+                    ${item.icon}
+                    ${item.title}
+                </h1>
+
+                <p>
+                    ${item.intro}
+                </p>
+
+            </section>
+
+            <section class="section-small">
+
+                <div class="device-diagram">
+
+                    <div style="
+                        text-align:center;
+                    ">
+
+                        <div style="
+                            font-size:140px;
+                            filter:drop-shadow(
+                                0 25px 35px rgba(0,0,0,.5)
+                            );
+                        ">
+                            ${item.icon}
+                        </div>
+
+                        <div class="eyebrow">
+                            ECE INSIDE
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="section-small">
+
+                <div class="section-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            BREAK IT DOWN
+                        </span>
+
+                        <h2>
+                            What's actually happening?
+                        </h2>
+
+                    </div>
+
+                    <p>
+                        The same ECE concepts you've learned
+                        appear as building blocks inside real systems.
+                    </p>
+
+                </div>
+
+                <div class="breakdown">
+
+                    ${item.blocks
+                        .map(
+                            ([title,text],index) => `
+
+                            <article class="breakdown-card">
+
+                                <span>
+                                    0${index+1}
+                                </span>
 
                                 <h3>
-                                    ${item.title}
+                                    ${title}
                                 </h3>
 
                                 <p>
-                                    ${item.description}
+                                    ${text}
                                 </p>
 
                             </article>
 
-                        `)
+                        `
+                        )
                         .join("")}
 
                 </div>
@@ -1873,21 +3112,36 @@ function renderEveryday() {
 
             <section class="section">
 
-                <div class="path-panel">
+                <div class="lesson-card">
 
                     <span class="eyebrow">
-                        NCU PHILOSOPHY
+                        🔗 CONNECT THE DOTS
                     </span>
 
                     <h2>
-                        Learn it → See it → Build it.
+                        This is why ECE matters.
                     </h2>
 
-                    <p class="lead">
-                        Every concept in the future NCU learning system
-                        will connect to at least one real engineering
-                        application.
+                    <p>
+                        A real product is rarely just one subject.
+                        It combines circuits, components, signals,
+                        embedded systems, software, communication
+                        and power electronics.
                     </p>
+
+                    <div class="ece-tags">
+
+                        ${item.tags
+                            .map(
+                                tag => `
+                                    <span class="ece-tag">
+                                        ${tag}
+                                    </span>
+                                `
+                            )
+                            .join("")}
+
+                    </div>
 
                 </div>
 
@@ -1909,53 +3163,31 @@ function renderCharacters() {
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
                     👾 CIRCUIT CREW
                 </span>
 
                 <h1>
-                    Meet the NCU Universe.
+                    Meet the engineers
+                    inside your head.
                 </h1>
 
                 <p>
-                    Complex engineering concepts become easier
-                    when they have a personality.
+                    Each mascot represents a concept.
+                    Together, they make difficult ideas easier
+                    to remember.
                 </p>
 
             </section>
 
             <section class="section-small">
 
-                <div class="character-grid">
+                <div class="mascot-grid">
 
-                    ${characters
-                        .map(character => `
-
-                            <article class="character-card">
-
-                                <div
-                                    class="character-avatar"
-                                >
-                                    ${character.icon}
-                                </div>
-
-                                <h3>
-                                    ${character.name}
-                                </h3>
-
-                                <p>
-                                    ${character.concept}
-                                </p>
-
-                                <p>
-                                    ${character.description}
-                                </p>
-
-                            </article>
-
-                        `)
+                    ${Object.values(mascots)
+                        .map(mascotCard)
                         .join("")}
 
                 </div>
@@ -1978,142 +3210,106 @@ function renderLab() {
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
                     🧪 NCU LAB
                 </span>
 
                 <h1>
-                    Learn by experimenting.
+                    Stop reading.
+                    Start experimenting.
                 </h1>
 
                 <p>
-                    Day 1 keeps the Lab foundation simple.
-                    More interactive circuit simulations will be
-                    added during the next stages.
+                    Day 1 introduces the interactive lab system.
+                    More circuit simulations will plug into this
+                    same architecture.
                 </p>
 
             </section>
 
             <section class="section-small">
 
-                <div class="calculator-grid">
+                <div class="lesson-card experiment">
 
-                    <div class="calculator">
+                    <span class="eyebrow">
+                        OHM'S LAW LAB
+                    </span>
 
-                        <span class="eyebrow">
-                            OHM'S LAW
-                        </span>
+                    <h2>
+                        Watch current change.
+                    </h2>
 
-                        <h3>
-                            Calculate Voltage
-                        </h3>
+                    <div class="experiment-grid">
 
-                        <div class="calculator-fields">
+                        <div class="controls">
 
-                            <div class="field">
+                            <div class="control-row">
 
                                 <label>
-                                    Current (A)
+                                    <span>
+                                        Voltage
+                                    </span>
+
+                                    <strong id="labV">
+                                        5 V
+                                    </strong>
                                 </label>
 
                                 <input
-                                    type="number"
-                                    id="ohmCurrent"
-                                    value="2"
-                                >
-
-                            </div>
-
-                            <div class="field">
-
-                                <label>
-                                    Resistance (Ω)
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="ohmResistance"
-                                    value="10"
-                                >
-
-                            </div>
-
-                        </div>
-
-                        <button
-                            class="button button-primary"
-                            id="calculateOhm"
-                            style="margin-top:15px"
-                        >
-                            Calculate
-                        </button>
-
-                        <div
-                            class="result"
-                            id="ohmResult"
-                        >
-                            V = 20 V
-                        </div>
-
-                    </div>
-
-                    <div class="calculator">
-
-                        <span class="eyebrow">
-                            POWER
-                        </span>
-
-                        <h3>
-                            Calculate Power
-                        </h3>
-
-                        <div class="calculator-fields">
-
-                            <div class="field">
-
-                                <label>
-                                    Voltage (V)
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="powerVoltage"
+                                    id="labVoltage"
+                                    type="range"
+                                    min="1"
+                                    max="24"
                                     value="5"
                                 >
 
                             </div>
 
-                            <div class="field">
+                            <div class="control-row">
 
                                 <label>
-                                    Current (A)
+                                    <span>
+                                        Resistance
+                                    </span>
+
+                                    <strong id="labR">
+                                        100 Ω
+                                    </strong>
                                 </label>
 
                                 <input
-                                    type="number"
-                                    id="powerCurrent"
-                                    value="2"
+                                    id="labResistance"
+                                    type="range"
+                                    min="10"
+                                    max="1000"
+                                    value="100"
                                 >
 
                             </div>
 
+                            <div class="value-box">
+                                V = <span id="labVoltageText">5</span> V
+                            </div>
+
+                            <div class="value-box">
+                                R = <span id="labResistanceText">100</span> Ω
+                            </div>
+
+                            <div class="value-box">
+                                I =
+                                <strong id="labCurrent">
+                                    50 mA
+                                </strong>
+                            </div>
+
                         </div>
 
-                        <button
-                            class="button button-primary"
-                            id="calculatePower"
-                            style="margin-top:15px"
-                        >
-                            Calculate
-                        </button>
+                        <div class="circuit-screen">
 
-                        <div
-                            class="result"
-                            id="powerResult"
-                        >
-                            P = 10 W
+                            ${svgResistance()}
+
                         </div>
 
                     </div>
@@ -2132,32 +3328,47 @@ function renderLab() {
    QUIZ
 ============================================================ */
 
-const quizQuestions = [
+const quiz = [
 
     {
         question:
-            "What is the SI unit of electric current?",
+            "Which quantity represents electric potential difference?",
+
+        options: [
+            "Current",
+            "Voltage",
+            "Resistance",
+            "Power"
+        ],
+
+        answer: 1
+
+    },
+
+    {
+        question:
+            "What is the SI unit of current?",
 
         options: [
             "Volt",
-            "Ampere",
             "Ohm",
+            "Ampere",
             "Watt"
         ],
 
-        answer: 1
+        answer: 2
 
     },
 
     {
         question:
-            "Which equation represents Ohm's Law?",
+            "According to Ohm's Law, if resistance increases while voltage remains constant, current:",
 
         options: [
-            "P = VI",
-            "V = IR",
-            "Q = It",
-            "E = mc²"
+            "Increases",
+            "Decreases",
+            "Always becomes zero",
+            "Does not change"
         ],
 
         answer: 1
@@ -2166,13 +3377,13 @@ const quizQuestions = [
 
     {
         question:
-            "Which component is primarily used to oppose current?",
+            "Which component primarily opposes current in a basic circuit?",
 
         options: [
             "Resistor",
-            "Capacitor",
-            "LED",
-            "Transformer"
+            "Battery",
+            "Wire",
+            "Antenna"
         ],
 
         answer: 0
@@ -2187,70 +3398,68 @@ function renderQuiz() {
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
                     🧠 QUIZ ARENA
                 </span>
 
                 <h1>
-                    Test your fundamentals.
+                    Let's see what
+                    you actually remember.
                 </h1>
 
                 <p>
-                    Day 1 starter quiz. The full Quiz Arena will
-                    eventually contain beginner, intermediate,
-                    advanced and interview modes.
+                    Don't worry about getting everything right.
+                    Mistakes are part of engineering.
                 </p>
 
             </section>
 
             <section class="section-small">
 
-                <div class="lesson-content">
+                ${quiz
+                    .map(
+                        (q,index) => `
 
-                    ${quizQuestions
-                        .map((question, index) => `
+                        <div
+                            class="quiz-question"
+                            data-question="${index}"
+                        >
 
-                            <article
-                                class="lesson-block"
-                                data-question="${index}"
-                            >
+                            <span class="eyebrow">
+                                QUESTION ${index+1}
+                            </span>
 
-                                <span class="eyebrow">
-                                    QUESTION ${index + 1}
-                                </span>
+                            <h3 style="margin-top:10px">
+                                ${q.question}
+                            </h3>
 
-                                <h3 style="margin-top:10px">
-                                    ${question.question}
-                                </h3>
+                            <div class="quiz-options">
 
-                                <div class="quiz-options">
+                                ${q.options
+                                    .map(
+                                        (option,i) => `
 
-                                    ${question.options
-                                        .map(
-                                            (option, optionIndex) => `
+                                        <button
+                                            class="quiz-option"
+                                            data-answer="${i}"
+                                            data-correct="${q.answer}"
+                                        >
+                                            ${option}
+                                        </button>
 
-                                            <button
-                                                class="quiz-option"
-                                                data-answer="${optionIndex}"
-                                                data-correct="${question.answer}"
-                                            >
-                                                ${option}
-                                            </button>
+                                    `
+                                    )
+                                    .join("")}
 
-                                        `
-                                        )
-                                        .join("")}
+                            </div>
 
-                                </div>
+                        </div>
 
-                            </article>
-
-                        `)
-                        .join("")}
-
-                </div>
+                    `
+                    )
+                    .join("")}
 
             </section>
 
@@ -2266,31 +3475,26 @@ function renderQuiz() {
 
 function renderProgress() {
 
-    const xp = getXP();
+    const xp =
+        getXP();
 
-    const level =
-        getLevel(xp);
+    const lvl =
+        level();
 
     const completed =
         getCompleted();
 
-    const nextLevelXP =
-        level * 100;
-
-    const progress =
-        Math.min(
-            100,
-            (xp % 100)
-        );
+    const percentage =
+        xp % 100;
 
     return `
 
         <div class="page">
 
-            <section class="detail-header">
+            <section class="lesson-hero">
 
                 <span class="eyebrow">
-                    📊 YOUR ECE JOURNEY
+                    📊 YOUR JOURNEY
                 </span>
 
                 <h1>
@@ -2298,125 +3502,59 @@ function renderProgress() {
                 </h1>
 
                 <p>
-                    Your progress is currently stored locally.
-                    Supabase will replace this foundation later.
+                    Your current progress is stored locally.
+                    Supabase will replace this system later
+                    when accounts are introduced.
                 </p>
 
             </section>
 
             <section class="section-small">
 
-                <div class="progress-dashboard">
+                <div class="progress-card">
 
-                    <div class="level-card">
+                    <span class="eyebrow">
+                        CURRENT LEVEL
+                    </span>
 
-                        <span class="eyebrow">
-                            CURRENT LEVEL
-                        </span>
-
-                        <div class="level-number">
-                            ${level}
-                        </div>
-
-                        <div class="xp-big">
-                            ${xp} XP
-                        </div>
-
-                        <div class="path-progress">
-
-                            <span
-                                style="width:${progress}%"
-                            ></span>
-
-                        </div>
-
-                        <p class="muted">
-                            ${nextLevelXP - xp}
-                            XP until the next level.
-                        </p>
-
+                    <div class="progress-number">
+                        ${lvl}
                     </div>
 
-                    <div>
-
-                        <span class="eyebrow">
-                            BADGES
-                        </span>
-
-                        <div
-                            class="badges"
-                            style="margin-top:15px"
-                        >
-
-                            <div class="badge">
-
-                                <div class="badge-icon">
-                                    🌱
-                                </div>
-
-                                <strong>
-                                    First Step
-                                </strong>
-
-                                <small>
-                                    Start learning
-                                </small>
-
-                            </div>
-
-                            <div class="badge">
-
-                                <div class="badge-icon">
-                                    ⚡
-                                </div>
-
-                                <strong>
-                                    Circuit Mind
-                                </strong>
-
-                                <small>
-                                    5 concepts
-                                </small>
-
-                            </div>
-
-                            <div class="badge">
-
-                                <div class="badge-icon">
-                                    🔥
-                                </div>
-
-                                <strong>
-                                    Rising Engineer
-                                </strong>
-
-                                <small>
-                                    10 concepts
-                                </small>
-
-                            </div>
-
-                        </div>
-
+                    <div class="muted">
+                        ${xp} XP
                     </div>
+
+                    <div class="progress-bar">
+                        <span
+                            style="width:${percentage}%"
+                        ></span>
+                    </div>
+
+                    <p
+                        class="muted"
+                        style="margin-top:12px"
+                    >
+                        ${100 - percentage}
+                        XP until the next level.
+                    </p>
 
                 </div>
 
             </section>
 
-            <section class="section">
+            <section class="section-small">
 
-                <div class="section-header">
+                <div class="section-head">
 
                     <div>
 
                         <span class="eyebrow">
-                            COMPLETED
+                            COMPLETED CONCEPTS
                         </span>
 
                         <h2>
                             ${completed.length}
-                            concepts
                         </h2>
 
                     </div>
@@ -2425,54 +3563,65 @@ function renderProgress() {
 
                 ${
                     completed.length
-                        ? `
-                            <div class="topic-grid">
+                    ?
+                    `
+                        <div class="topic-grid">
 
-                                ${completed
-                                    .map(id => `
+                            ${completed
+                                .map(
+                                    id => `
 
-                                        <div class="topic-card">
+                                    <a
+                                        class="topic"
+                                        href="#/topic/${id}"
+                                    >
 
-                                            <span class="topic-tag">
-                                                COMPLETED
-                                            </span>
+                                        <span class="topic-tag">
+                                            ✓ COMPLETED
+                                        </span>
 
-                                            <h3>
-                                                ${id}
-                                            </h3>
+                                        <h3>
+                                            ${
+                                                lessons[id]
+                                                ?.title ||
+                                                id
+                                            }
+                                        </h3>
 
-                                            <p>
-                                                +25 XP earned
-                                            </p>
+                                        <p>
+                                            +25 XP
+                                        </p>
 
-                                        </div>
+                                    </a>
 
-                                    `)
-                                    .join("")}
+                                `
+                                )
+                                .join("")}
 
-                            </div>
-                        `
-                        : `
-                            <div class="empty-state">
+                        </div>
+                    `
+                    :
+                    `
+                        <div class="empty">
 
-                                <h2>
-                                    Your journey starts here.
-                                </h2>
+                            <h2>
+                                Your first concept is waiting.
+                            </h2>
 
-                                <p>
-                                    Complete your first lesson
-                                    to earn XP.
-                                </p>
+                            <p>
+                                Complete a lesson and start
+                                building your ECE XP.
+                            </p>
 
-                                <a
-                                    href="#/learn"
-                                    class="button button-primary"
-                                >
-                                    Start Learning
-                                </a>
+                            <a
+                                href="#/learn"
+                                class="btn btn-primary"
+                            >
+                                Start Learning
+                            </a>
 
-                            </div>
-                        `
+                        </div>
+                    `
                 }
 
             </section>
@@ -2484,206 +3633,19 @@ function renderProgress() {
 }
 
 /* ============================================================
-   PROJECTS
+   ROUTER
 ============================================================ */
 
-function renderProjects() {
+function route() {
 
-    const projects = [
+    const hash =
+        location.hash
+            .replace(/^#/, "")
+            .replace(/\/+$/, "");
 
-        {
-            level: "BEGINNER",
-            title: "Automatic Night Lamp",
-            description:
-                "Use an LDR and transistor or microcontroller to switch a light automatically."
-        },
-
-        {
-            level: "BEGINNER",
-            title: "Digital Thermometer",
-            description:
-                "Read temperature using a sensor and display the measured value."
-        },
-
-        {
-            level: "INTERMEDIATE",
-            title: "Smart Parking",
-            description:
-                "Combine ultrasonic sensing, embedded logic and a user interface."
-        },
-
-        {
-            level: "INTERMEDIATE",
-            title: "Weather Station",
-            description:
-                "Measure environmental parameters and publish the data."
-        },
-
-        {
-            level: "ADVANCED",
-            title: "ESP32 IoT System",
-            description:
-                "Connect sensors, cloud services and an embedded controller."
-        },
-
-        {
-            level: "ADVANCED",
-            title: "Smart Traffic System",
-            description:
-                "Combine sensing, embedded control and computer vision."
-        }
-
-    ];
-
-    return `
-
-        <div class="page">
-
-            <section class="detail-header">
-
-                <span class="eyebrow">
-                    🛠️ PROJECT UNIVERSE
-                </span>
-
-                <h1>
-                    Learn by building.
-                </h1>
-
-                <p>
-                    Projects will eventually map directly to the
-                    concepts you learn inside the ECE Universe.
-                </p>
-
-            </section>
-
-            <section class="section-small">
-
-                <div class="card-grid">
-
-                    ${projects
-                        .map(project => `
-
-                            <article class="card">
-
-                                <span class="eyebrow">
-                                    ${project.level}
-                                </span>
-
-                                <h3 style="margin-top:12px">
-                                    ${project.title}
-                                </h3>
-
-                                <p>
-                                    ${project.description}
-                                </p>
-
-                            </article>
-
-                        `)
-                        .join("")}
-
-                </div>
-
-            </section>
-
-        </div>
-
-    `;
+    return hash || "/";
 
 }
-
-/* ============================================================
-   STORIES
-============================================================ */
-
-function renderStories() {
-
-    return `
-
-        <div class="page">
-
-            <section class="detail-header">
-
-                <span class="eyebrow">
-                    🎬 NCU STORIES
-                </span>
-
-                <h1>
-                    Engineering with characters.
-                </h1>
-
-                <p>
-                    Volto, Curro, Resi and Shorty will turn difficult
-                    electronics concepts into memorable stories.
-                </p>
-
-            </section>
-
-            <section class="section-small">
-
-                <div class="card-grid">
-
-                    <article class="card">
-
-                        <span class="eyebrow">
-                            EP 01
-                        </span>
-
-                        <h3 style="margin-top:12px">
-                            Meet Volto
-                        </h3>
-
-                        <p>
-                            The first journey into voltage.
-                        </p>
-
-                    </article>
-
-                    <article class="card">
-
-                        <span class="eyebrow">
-                            EP 02
-                        </span>
-
-                        <h3 style="margin-top:12px">
-                            Curro Arrives
-                        </h3>
-
-                        <p>
-                            Current enters the NCU Universe.
-                        </p>
-
-                    </article>
-
-                    <article class="card">
-
-                        <span class="eyebrow">
-                            EP 03
-                        </span>
-
-                        <h3 style="margin-top:12px">
-                            Resi Says Stop
-                        </h3>
-
-                        <p>
-                            Resistance joins the crew.
-                        </p>
-
-                    </article>
-
-                </div>
-
-            </section>
-
-        </div>
-
-    `;
-
-}
-
-/* ============================================================
-   NOT FOUND
-============================================================ */
 
 function renderNotFound() {
 
@@ -2691,23 +3653,23 @@ function renderNotFound() {
 
         <div class="page">
 
-            <div class="empty-state">
+            <div class="empty">
 
                 <span class="eyebrow">
                     SIGNAL LOST
                 </span>
 
                 <h2>
-                    Page not found.
+                    This circuit isn't connected yet.
                 </h2>
 
                 <p>
-                    Looks like this circuit isn't connected yet.
+                    This part of the universe is coming later.
                 </p>
 
                 <a
                     href="#/"
-                    class="button button-primary"
+                    class="btn btn-primary"
                 >
                     Return Home
                 </a>
@@ -2720,48 +3682,40 @@ function renderNotFound() {
 
 }
 
-/* ============================================================
-   ROUTER
-============================================================ */
+function render() {
 
-function getRoute() {
-
-    const hash =
-        window.location.hash
-            .replace(/^#/, "")
-            .replace(/\/+$/, "");
-
-    return hash || "/";
-
-}
-
-function renderRoute() {
-
-    const route =
-        getRoute();
+    const current =
+        route();
 
     const parts =
-        route
+        current
             .split("/")
             .filter(Boolean);
 
-    let html = "";
+    let html;
 
-    if (route === "/") {
+    if (current === "/") {
 
-        html = renderHome();
-
-    }
-
-    else if (route === "/universe") {
-
-        html = renderUniverse();
+        html =
+            renderHome();
 
     }
 
-    else if (route === "/learn") {
+    else if (
+        current === "/universe"
+    ) {
 
-        html = renderLearn();
+        html =
+            renderUniverse();
+
+    }
+
+    else if (
+        current === "/learn"
+    ) {
+
+        html =
+            renderLearn();
 
     }
 
@@ -2789,52 +3743,60 @@ function renderRoute() {
 
     }
 
-    else if (route === "/everyday") {
+    else if (
+        current === "/everyday"
+    ) {
 
         html =
             renderEveryday();
 
     }
 
-    else if (route === "/characters") {
+    else if (
+        parts[0] === "everyday" &&
+        parts[1]
+    ) {
+
+        html =
+            renderEverydayDetail(
+                parts[1]
+            );
+
+    }
+
+    else if (
+        current === "/characters"
+    ) {
 
         html =
             renderCharacters();
 
     }
 
-    else if (route === "/lab") {
+    else if (
+        current === "/lab"
+    ) {
 
         html =
             renderLab();
 
     }
 
-    else if (route === "/quiz") {
+    else if (
+        current === "/quiz"
+    ) {
 
         html =
             renderQuiz();
 
     }
 
-    else if (route === "/progress") {
+    else if (
+        current === "/progress"
+    ) {
 
         html =
             renderProgress();
-
-    }
-
-    else if (route === "/projects") {
-
-        html =
-            renderProjects();
-
-    }
-
-    else if (route === "/stories") {
-
-        html =
-            renderStories();
 
     }
 
@@ -2849,11 +3811,11 @@ function renderRoute() {
         .getElementById("app")
         .innerHTML = html;
 
-    updateActiveNavigation();
+    updateNavigation();
 
-    updateHeaderXP();
+    updateXP();
 
-    attachPageEvents();
+    attachEvents();
 
     window.scrollTo({
         top: 0,
@@ -2866,25 +3828,23 @@ function renderRoute() {
    NAVIGATION
 ============================================================ */
 
-function updateActiveNavigation() {
+function updateNavigation() {
 
-    const route =
-        getRoute();
+    const current =
+        route();
 
     document
-        .querySelectorAll(
-            ".desktop-nav a"
-        )
+        .querySelectorAll(".nav a")
         .forEach(link => {
 
-            const target =
+            const href =
                 link
                     .getAttribute("href")
-                    .replace(/^#/, "");
+                    .replace("#","");
 
             link.classList.toggle(
                 "active",
-                target === route
+                href === current
             );
 
         });
@@ -2892,14 +3852,107 @@ function updateActiveNavigation() {
 }
 
 /* ============================================================
-   PAGE EVENTS
+   EXPERIMENT ENGINE
 ============================================================ */
 
-function attachPageEvents() {
+function calculateCircuit(
+    voltage,
+    resistance
+) {
+
+    const current =
+        voltage / resistance;
+
+    const power =
+        voltage * current;
+
+    return {
+        current,
+        power
+    };
+
+}
+
+function updateExperiment(
+    voltageId,
+    resistanceId,
+    voltageTextId,
+    resistanceTextId,
+    currentId,
+    powerId
+) {
+
+    const v =
+        Number(
+            document.getElementById(
+                voltageId
+            )?.value || 5
+        );
+
+    const r =
+        Number(
+            document.getElementById(
+                resistanceId
+            )?.value || 100
+        );
+
+    const result =
+        calculateCircuit(
+            v,
+            r
+        );
+
+    const vText =
+        document.getElementById(
+            voltageTextId
+        );
+
+    const rText =
+        document.getElementById(
+            resistanceTextId
+        );
+
+    const current =
+        document.getElementById(
+            currentId
+        );
+
+    const power =
+        document.getElementById(
+            powerId
+        );
+
+    if (vText)
+        vText.textContent =
+            `${v} V`;
+
+    if (rText)
+        rText.textContent =
+            `${r} Ω`;
+
+    if (current)
+        current.textContent =
+            `${(
+                result.current * 1000
+            ).toFixed(1)} mA`;
+
+    if (power)
+        power.textContent =
+            `${result.power.toFixed(2)} W`;
+
+}
+
+/* ============================================================
+   EVENTS
+============================================================ */
+
+function attachEvents() {
+
+    /* Complete lesson */
 
     document
         .querySelectorAll(
-            "[data-complete-topic]"
+            "[data-complete]"
         )
         .forEach(button => {
 
@@ -2908,63 +3961,58 @@ function attachPageEvents() {
                 () => {
 
                     const id =
-                        button.dataset.completeTopic;
+                        button.dataset.complete;
 
-                    completeTopic(id);
+                    if (
+                        complete(id)
+                    ) {
 
-                    button.textContent =
-                        "✓ Completed · +25 XP";
+                        button.textContent =
+                            "✓ Learned · +25 XP";
 
-                    button.disabled = true;
+                        button.disabled =
+                            true;
 
-                    button.style.opacity =
-                        "0.7";
+                    }
 
                 }
             );
 
         });
 
+    /* Lesson quiz */
+
     document
         .querySelectorAll(
-            ".quiz-option"
+            "#lessonQuiz .quiz-option"
         )
-        .forEach(option => {
+        .forEach(button => {
 
-            option.addEventListener(
+            button.addEventListener(
                 "click",
                 () => {
 
                     const correct =
-                        Number(
-                            option.dataset.correct
-                        );
-
-                    const answer =
-                        Number(
-                            option.dataset.answer
-                        );
+                        button.dataset.correct ===
+                        "true";
 
                     const parent =
-                        option.closest(
-                            "[data-question]"
-                        );
+                        button.parentElement;
 
                     parent
                         .querySelectorAll(
                             ".quiz-option"
                         )
-                        .forEach(item => {
+                        .forEach(
+                            item => {
+                                item.disabled =
+                                    true;
+                            }
+                        );
 
-                            item.disabled = true;
+                    if (correct) {
 
-                        });
-
-                    if (
-                        answer === correct
-                    ) {
-
-                        option.classList.add(
+                        button.classList.add(
                             "correct"
                         );
 
@@ -2972,7 +4020,76 @@ function attachPageEvents() {
 
                     } else {
 
-                        option.classList.add(
+                        button.classList.add(
+                            "wrong"
+                        );
+
+                        parent
+                            .querySelector(
+                                '[data-correct="true"]'
+                            )
+                            ?.classList.add(
+                                "correct"
+                            );
+
+                    }
+
+                }
+            );
+
+        });
+
+    /* Main quiz */
+
+    document
+        .querySelectorAll(
+            ".quiz-question .quiz-option"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const parent =
+                        button.closest(
+                            ".quiz-question"
+                        );
+
+                    parent
+                        .querySelectorAll(
+                            ".quiz-option"
+                        )
+                        .forEach(
+                            item => {
+                                item.disabled =
+                                    true;
+                            }
+                        );
+
+                    const answer =
+                        Number(
+                            button.dataset.answer
+                        );
+
+                    const correct =
+                        Number(
+                            button.dataset.correct
+                        );
+
+                    if (
+                        answer === correct
+                    ) {
+
+                        button.classList.add(
+                            "correct"
+                        );
+
+                        addXP(10);
+
+                    } else {
+
+                        button.classList.add(
                             "wrong"
                         );
 
@@ -2991,185 +4108,226 @@ function attachPageEvents() {
 
         });
 
-    const calculateOhm =
+    /* Lesson experiment */
+
+    const vSlider =
         document.getElementById(
-            "calculateOhm"
+            "voltageSlider"
         );
 
-    if (calculateOhm) {
+    const rSlider =
+        document.getElementById(
+            "resistanceSlider"
+        );
 
-        calculateOhm.addEventListener(
-            "click",
+    if (
+        vSlider &&
+        rSlider
+    ) {
+
+        const update =
             () => {
 
-                const current =
-                    Number(
-                        document.getElementById(
-                            "ohmCurrent"
-                        ).value
-                    );
+                updateExperiment(
+                    "voltageSlider",
+                    "resistanceSlider",
+                    "voltageValue",
+                    "resistanceValue",
+                    "currentValue",
+                    "experimentPower"
+                );
 
-                const resistance =
-                    Number(
-                        document.getElementById(
-                            "ohmResistance"
-                        ).value
-                    );
+            };
 
-                const voltage =
-                    current *
-                    resistance;
-
-                document.getElementById(
-                    "ohmResult"
-                ).textContent =
-                    `V = ${voltage} V`;
-
-            }
+        vSlider.addEventListener(
+            "input",
+            update
         );
+
+        rSlider.addEventListener(
+            "input",
+            update
+        );
+
+        update();
 
     }
 
-    const calculatePower =
+    /* Lab */
+
+    const labV =
         document.getElementById(
-            "calculatePower"
+            "labVoltage"
         );
 
-    if (calculatePower) {
+    const labR =
+        document.getElementById(
+            "labResistance"
+        );
 
-        calculatePower.addEventListener(
-            "click",
+    if (
+        labV &&
+        labR
+    ) {
+
+        const updateLab =
             () => {
 
-                const voltage =
+                const v =
                     Number(
-                        document.getElementById(
-                            "powerVoltage"
-                        ).value
+                        labV.value
                     );
 
-                const current =
+                const r =
                     Number(
-                        document.getElementById(
-                            "powerCurrent"
-                        ).value
+                        labR.value
                     );
 
-                const power =
-                    voltage *
-                    current;
+                const i =
+                    v / r;
 
                 document.getElementById(
-                    "powerResult"
+                    "labV"
                 ).textContent =
-                    `P = ${power} W`;
+                    `${v} V`;
 
-            }
+                document.getElementById(
+                    "labR"
+                ).textContent =
+                    `${r} Ω`;
+
+                document.getElementById(
+                    "labVoltageText"
+                ).textContent =
+                    v;
+
+                document.getElementById(
+                    "labResistanceText"
+                ).textContent =
+                    r;
+
+                document.getElementById(
+                    "labCurrent"
+                ).textContent =
+                    `${(
+                        i * 1000
+                    ).toFixed(1)} mA`;
+
+            };
+
+        labV.addEventListener(
+            "input",
+            updateLab
         );
+
+        labR.addEventListener(
+            "input",
+            updateLab
+        );
+
+        updateLab();
 
     }
 
 }
 
 /* ============================================================
-   SEARCH INDEX
+   SEARCH
 ============================================================ */
 
 function buildSearchIndex() {
 
     const index = [];
 
-    domains.forEach(domain => {
+    Object.entries(
+        lessons
+    ).forEach(
+        ([id,lesson]) => {
 
-        index.push({
+            index.push({
 
-            type: "Learning World",
+                type: "ECE Concept",
 
-            title: domain.title,
+                title:
+                    lesson.title,
 
-            description:
-                domain.description,
+                description:
+                    lesson.subtitle,
 
-            url:
-                `#/learn/${domain.id}`
+                url:
+                    `#/topic/${id}`
 
-        });
+            });
 
-    });
+        }
+    );
 
-    beginnerTopics.forEach(topic => {
+    domains.forEach(
+        domain => {
 
-        index.push({
+            index.push({
 
-            type: "Concept",
+                type: "ECE World",
 
-            title: topic.title,
+                title:
+                    domain.title,
 
-            description:
-                topic.description,
+                description:
+                    domain.description,
 
-            url:
-                `#/topic/${topic.id}`
+                url:
+                    `#/learn/${domain.id}`
 
-        });
+            });
 
-    });
+        }
+    );
 
-    everydayEngineering.forEach(item => {
+    everyday.forEach(
+        item => {
 
-        index.push({
+            index.push({
 
-            type:
-                "Everyday Engineering",
+                type:
+                    "Everyday Engineering",
 
-            title: item.title,
+                title:
+                    item.title,
 
-            description:
-                item.description,
+                description:
+                    item.description,
 
-            url:
-                "#/everyday"
+                url:
+                    `#/everyday/${item.id}`
 
-        });
+            });
 
-    });
+        }
+    );
 
-    characters.forEach(character => {
+    Object.values(
+        mascots
+    ).forEach(
+        mascot => {
 
-        index.push({
+            index.push({
 
-            type: "NCU Character",
+                type:
+                    "NCU Mascot",
 
-            title:
-                `${character.name} — ${character.concept}`,
+                title:
+                    `${mascot.name} — ${mascot.concept}`,
 
-            description:
-                character.description,
+                description:
+                    mascot.line,
 
-            url:
-                "#/characters"
+                url:
+                    "#/characters"
 
-        });
+            });
 
-    });
-
-    roadmap.forEach(item => {
-
-        index.push({
-
-            type: "ECE Roadmap",
-
-            title: item.stage,
-
-            description:
-                item.description,
-
-            url:
-                "#/universe"
-
-        });
-
-    });
+        }
+    );
 
     return index;
 
@@ -3178,26 +4336,19 @@ function buildSearchIndex() {
 const searchIndex =
     buildSearchIndex();
 
-/* ============================================================
-   SEARCH
-============================================================ */
-
 function openSearch() {
 
-    const modal =
+    const overlay =
         document.getElementById(
-            "searchModal"
+            "searchOverlay"
         );
 
-    modal.classList.add("open");
-
-    modal.setAttribute(
-        "aria-hidden",
-        "false"
+    overlay.classList.add(
+        "open"
     );
 
     document.body.classList.add(
-        "modal-open"
+        "lock"
     );
 
     setTimeout(
@@ -3217,45 +4368,38 @@ function openSearch() {
 
 function closeSearch() {
 
-    const modal =
-        document.getElementById(
-            "searchModal"
+    document
+        .getElementById(
+            "searchOverlay"
+        )
+        .classList.remove(
+            "open"
         );
 
-    modal.classList.remove(
-        "open"
-    );
-
-    modal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
     document.body.classList.remove(
-        "modal-open"
+        "lock"
     );
 
 }
 
-function performSearch(query) {
+function search(query) {
 
     const results =
         document.getElementById(
             "searchResults"
         );
 
-    const clean =
+    const value =
         query
             .trim()
             .toLowerCase();
 
-    if (!clean) {
+    if (!value) {
 
         results.innerHTML = `
 
-            <div class="search-empty">
-                Start typing to explore the
-                ECE Universe.
+            <div class="search-placeholder">
+                Search the ECE Universe.
             </div>
 
         `;
@@ -3266,52 +4410,40 @@ function performSearch(query) {
 
     const matches =
         searchIndex
-            .filter(item => {
-
-                return (
-
+            .filter(
+                item =>
                     item.title
                         .toLowerCase()
-                        .includes(clean)
+                        .includes(value)
 
                     ||
 
                     item.description
                         .toLowerCase()
-                        .includes(clean)
+                        .includes(value)
 
                     ||
 
                     item.type
                         .toLowerCase()
-                        .includes(clean)
-
-                );
-
-            })
-            .slice(0, 12);
+                        .includes(value)
+            )
+            .slice(0,15);
 
     if (!matches.length) {
 
         results.innerHTML = `
 
-            <div class="search-empty">
-
-                No results found for
-                <strong>
-                    "${escapeHTML(query)}"
-                </strong>.
-
+            <div class="search-placeholder">
+                No concept found.
                 <br><br>
-
                 Try:
                 voltage,
                 current,
-                embedded,
-                VLSI,
+                resistor,
                 ESP32,
-                resistor...
-
+                VLSI,
+                smartphone...
             </div>
 
         `;
@@ -3322,163 +4454,150 @@ function performSearch(query) {
 
     results.innerHTML =
         matches
-            .map(item => `
+            .map(
+                item => `
 
-                <a
-                    class="search-result"
-                    href="${item.url}"
-                    data-search-link
-                >
+                    <a
+                        href="${item.url}"
+                        class="search-result"
+                    >
 
-                    <span class="search-result-type">
-                        ${item.type}
-                    </span>
+                        <small>
+                            ${item.type}
+                        </small>
 
-                    <strong>
-                        ${item.title}
-                    </strong>
+                        <strong>
+                            ${item.title}
+                        </strong>
 
-                    <p>
-                        ${item.description}
-                    </p>
+                        <p>
+                            ${item.description}
+                        </p>
 
-                </a>
+                    </a>
 
-            `)
+                `
+            )
             .join("");
 
-    document
+    results
         .querySelectorAll(
-            "[data-search-link]"
+            "a"
         )
-        .forEach(link => {
-
-            link.addEventListener(
-                "click",
-                closeSearch
-            );
-
-        });
+        .forEach(
+            link =>
+                link.addEventListener(
+                    "click",
+                    closeSearch
+                )
+        );
 
 }
 
 /* ============================================================
-   GLOBAL EVENTS
+   GLOBAL
 ============================================================ */
 
 document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        document
-            .getElementById(
-                "footerYear"
-            )
-            .textContent =
+        document.getElementById(
+            "year"
+        ).textContent =
             new Date()
                 .getFullYear();
 
-        document
-            .getElementById(
-                "searchButton"
-            )
-            .addEventListener(
-                "click",
-                openSearch
-            );
+        document.getElementById(
+            "searchOpen"
+        ).addEventListener(
+            "click",
+            openSearch
+        );
+
+        document.getElementById(
+            "searchClose"
+        ).addEventListener(
+            "click",
+            closeSearch
+        );
+
+        document.getElementById(
+            "searchInput"
+        ).addEventListener(
+            "input",
+            e =>
+                search(
+                    e.target.value
+                )
+        );
+
+        document.getElementById(
+            "searchOverlay"
+        ).addEventListener(
+            "click",
+            e => {
+
+                if (
+                    e.target.id ===
+                    "searchOverlay"
+                ) {
+
+                    closeSearch();
+
+                }
+
+            }
+        );
+
+        document.getElementById(
+            "mobileMenu"
+        ).addEventListener(
+            "click",
+            () => {
+
+                document
+                    .getElementById(
+                        "mobileNav"
+                    )
+                    .classList.toggle(
+                        "open"
+                    );
+
+            }
+        );
 
         document
-            .getElementById(
-                "closeSearch"
+            .querySelectorAll(
+                ".mobile-nav a"
             )
-            .addEventListener(
-                "click",
-                closeSearch
-            );
+            .forEach(
+                link => {
 
-        document
-            .getElementById(
-                "searchInput"
-            )
-            .addEventListener(
-                "input",
-                event => {
+                    link.addEventListener(
+                        "click",
+                        () => {
 
-                    performSearch(
-                        event.target.value
+                            document
+                                .getElementById(
+                                    "mobileNav"
+                                )
+                                .classList.remove(
+                                    "open"
+                                );
+
+                        }
                     );
 
                 }
             );
 
-        document
-            .getElementById(
-                "searchModal"
-            )
-            .addEventListener(
-                "click",
-                event => {
-
-                    if (
-                        event.target.id ===
-                        "searchModal"
-                    ) {
-
-                        closeSearch();
-
-                    }
-
-                }
-            );
-
-        document
-            .getElementById(
-                "menuButton"
-            )
-            .addEventListener(
-                "click",
-                () => {
-
-                    document
-                        .getElementById(
-                            "mobileNav"
-                        )
-                        .classList.toggle(
-                            "open"
-                        );
-
-                }
-            );
-
-        document
-            .querySelectorAll(
-                "#mobileNav a"
-            )
-            .forEach(link => {
-
-                link.addEventListener(
-                    "click",
-                    () => {
-
-                        document
-                            .getElementById(
-                                "mobileNav"
-                            )
-                            .classList.remove(
-                                "open"
-                            );
-
-                    }
-                );
-
-            });
-
         document.addEventListener(
             "keydown",
-            event => {
+            e => {
 
                 if (
-                    event.key ===
+                    e.key ===
                     "Escape"
                 ) {
 
@@ -3487,13 +4606,13 @@ document.addEventListener(
                 }
 
                 if (
-                    (event.ctrlKey ||
-                        event.metaKey) &&
-                    event.key.toLowerCase() ===
+                    (e.ctrlKey ||
+                        e.metaKey) &&
+                    e.key.toLowerCase() ===
                         "k"
                 ) {
 
-                    event.preventDefault();
+                    e.preventDefault();
 
                     openSearch();
 
@@ -3504,10 +4623,10 @@ document.addEventListener(
 
         window.addEventListener(
             "hashchange",
-            renderRoute
+            render
         );
 
-        renderRoute();
+        render();
 
     }
 );
