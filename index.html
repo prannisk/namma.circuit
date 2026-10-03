@@ -4,297 +4,310 @@
 <head>
 
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="theme-color"
-        content="#060a11"
-    >
-
-    <meta
-        name="description"
-        content="Namma Circuit Universe — an interactive ECE learning universe from absolute basics to advanced electronics."
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050911">
+    <meta name="description" content="Namma Circuit — An interactive ECE Universe. Learn Electronics & Communication Engineering through stories, simulations, labs, and real-world examples. Short Circuit illa, Smart Circuit.">
+    <meta name="keywords" content="ECE, Electronics, Communication Engineering, Circuit Theory, VLSI, Embedded Systems, Digital Electronics, Analog Electronics, Microprocessors, Learning Platform">
 
     <title>Namma Circuit — ECE Universe</title>
 
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23050911'/%3E%3Crect x='4' y='4' width='40' height='40' rx='9' fill='none' stroke='%237fffb2' stroke-width='1.5' opacity='.3'/%3E%3Cpath d='M8 24h8M32 24h8M16 8v8M16 32v8M32 8v8M32 32v8' stroke='%237fffb2' stroke-width='1.5' stroke-linecap='round' opacity='.5'/%3E%3Ccircle cx='16' cy='24' r='3' fill='%237fffb2'/%3E%3Ccircle cx='32' cy='24' r='3' fill='%2336d9d9'/%3E%3Cpath d='M19 24h10' stroke='%237fffb2' stroke-width='2' stroke-linecap='round'/%3E%3Ctext x='24' y='44' font-family='sans-serif' font-size='7' fill='%237fffb2' text-anchor='middle' opacity='.7'%3ENCU%3C/text%3E%3C/svg%3E">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="styles.css"
-    >
+    <link rel="stylesheet" href="styles.css">
 
 </head>
 
 <body>
 
-    <!-- Background -->
-    <div class="noise"></div>
-    <div class="grid-bg"></div>
+    <!-- ======================================================
+         LOADING SCREEN
+    ====================================================== -->
+    <div id="ncuLoader" class="ncu-loader" aria-live="polite" aria-label="NCU Universe loading">
+        <div class="loader-inner">
 
-    <div class="ambient ambient-1"></div>
-    <div class="ambient ambient-2"></div>
-
-    <!-- Header -->
-    <header class="header">
-
-        <a
-            href="#/"
-            class="brand"
-        >
-
-            <div class="brand-logo">
-                ⚡
+            <!-- NCU SVG Logo -->
+            <div class="loader-logo">
+                <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="loader-logo-svg">
+                    <rect width="80" height="80" rx="20" fill="#050911"/>
+                    <rect x="4" y="4" width="72" height="72" rx="17" fill="none" stroke="#7fffb2" stroke-width="1" opacity=".2"/>
+                    <!-- PCB traces -->
+                    <path d="M8 40H24M56 40H72" stroke="#7fffb2" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+                    <path d="M40 8V24M40 56V72" stroke="#36d9d9" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+                    <!-- Corner nodes -->
+                    <circle cx="24" cy="24" r="3" fill="#7fffb2" opacity=".5"/>
+                    <circle cx="56" cy="24" r="3" fill="#36d9d9" opacity=".5"/>
+                    <circle cx="24" cy="56" r="3" fill="#36d9d9" opacity=".5"/>
+                    <circle cx="56" cy="56" r="3" fill="#7fffb2" opacity=".5"/>
+                    <!-- Hexagon core -->
+                    <polygon points="40,16 54,24 54,40 40,48 26,40 26,24" fill="none" stroke="#7fffb2" stroke-width="1.5" opacity=".7" class="loader-hex"/>
+                    <!-- Lightning bolt -->
+                    <path d="M44 22L36 38H42L38 52L50 36H44L47 22Z" fill="#7fffb2" class="loader-bolt"/>
+                    <!-- Glow -->
+                    <ellipse cx="40" cy="37" rx="12" ry="14" fill="#7fffb2" opacity=".08"/>
+                </svg>
             </div>
 
+            <div class="loader-brand">NAMMA CIRCUIT</div>
+            <div class="loader-sub">ECE UNIVERSE</div>
+
+            <!-- Loading sequence -->
+            <div class="loader-seq" id="loaderSeq">
+                <div class="loader-line active" id="loaderLine1">NCU CORE INITIALIZING...</div>
+                <div class="loader-line" id="loaderLine2">CIRCUIT TRACES ACTIVATING...</div>
+                <div class="loader-line" id="loaderLine3">ECE WORLDS ILLUMINATING...</div>
+                <div class="loader-line online" id="loaderLine4">⚡ UNIVERSE ONLINE</div>
+            </div>
+
+            <!-- Circuit trace animation -->
+            <div class="loader-traces" aria-hidden="true">
+                <svg viewBox="0 0 300 30" fill="none">
+                    <path class="loader-trace-path" d="M0 15 H50 L65 5 H100 L115 25 H150 L165 5 H200 L215 25 H250 L265 15 H300" stroke="#7fffb2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle class="loader-electron" cx="0" cy="15" r="3" fill="#7fffb2"/>
+                </svg>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Background layers -->
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-dots" aria-hidden="true"></div>
+    <div class="bg-noise" aria-hidden="true"></div>
+    <div class="ambient ambient-1" aria-hidden="true"></div>
+    <div class="ambient ambient-2" aria-hidden="true"></div>
+    <div class="ambient ambient-3" aria-hidden="true"></div>
+
+    <!-- PCB Traces overlay -->
+    <svg class="pcb-traces-hero" viewBox="0 0 1200 600" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+        <path d="M0 100 H300 L350 50 H600 L650 150 H900 L950 80 H1200" stroke="#7fffb2" stroke-width="0.8" opacity="0.06"/>
+        <path d="M0 300 H200 L250 350 H500 L550 250 H750 L800 350 H1200" stroke="#36d9d9" stroke-width="0.8" opacity="0.05"/>
+        <path d="M0 500 H100 L150 450 H400 L450 550 H700 L750 480 H1200" stroke="#a78bfa" stroke-width="0.8" opacity="0.04"/>
+        <circle cx="300" cy="100" r="3" fill="#7fffb2" opacity="0.15"/>
+        <circle cx="600" cy="50" r="3" fill="#7fffb2" opacity="0.12"/>
+        <circle cx="900" cy="150" r="3" fill="#36d9d9" opacity="0.12"/>
+        <circle cx="200" cy="300" r="3" fill="#36d9d9" opacity="0.12"/>
+        <circle cx="500" cy="350" r="3" fill="#a78bfa" opacity="0.1"/>
+        <circle cx="750" cy="250" r="3" fill="#a78bfa" opacity="0.1"/>
+    </svg>
+
+    <!-- ======================================================
+         HEADER
+    ====================================================== -->
+    <header class="header" id="siteHeader" role="banner">
+
+        <!-- Brand / Logo -->
+        <a href="#/" class="brand" aria-label="Namma Circuit — Home">
+
+            <!-- NCU SVG Logo Mark -->
+            <svg class="ncu-logo" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <!-- PCB substrate -->
+                <rect width="44" height="44" rx="12" fill="#050911"/>
+                <!-- Outer circuit border -->
+                <rect x="2.5" y="2.5" width="39" height="39" rx="10" stroke="#7fffb2" stroke-width="1" opacity=".25"/>
+                <!-- PCB traces -->
+                <path d="M5 22H13" stroke="#7fffb2" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+                <path d="M31 22H39" stroke="#36d9d9" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+                <path d="M22 5V13" stroke="#7fffb2" stroke-width="1.5" stroke-linecap="round" opacity=".4"/>
+                <path d="M22 31V39" stroke="#36d9d9" stroke-width="1.5" stroke-linecap="round" opacity=".4"/>
+                <!-- Corner nodes -->
+                <circle cx="13" cy="13" r="2" fill="#7fffb2" opacity=".35"/>
+                <circle cx="31" cy="13" r="2" fill="#36d9d9" opacity=".35"/>
+                <circle cx="13" cy="31" r="2" fill="#36d9d9" opacity=".35"/>
+                <circle cx="31" cy="31" r="2" fill="#7fffb2" opacity=".35"/>
+                <!-- Center: NCU hexagon core -->
+                <polygon points="22,9 29,13.5 29,22.5 22,27 15,22.5 15,13.5" fill="none" stroke="#7fffb2" stroke-width="1.2" opacity=".6"/>
+                <!-- Lightning bolt (NCU core symbol) -->
+                <path d="M24 13L19 21H23L20 29L27 20H23L25 13Z" fill="#7fffb2"/>
+                <!-- Glow effect -->
+                <ellipse cx="22" cy="21" rx="6" ry="7" fill="#7fffb2" opacity=".08"/>
+            </svg>
+
             <div class="brand-text">
-
-                <strong>
-                    NAMMA CIRCUIT
-                </strong>
-
-                <span>
-                    ECE UNIVERSE
-                </span>
-
+                <strong>NAMMA CIRCUIT</strong>
+                <span>ECE UNIVERSE</span>
             </div>
 
         </a>
 
-        <nav class="nav">
-
-            <a href="#/">
-                Home
-            </a>
-
-            <a href="#/universe">
-                Universe
-            </a>
-
-            <a href="#/learn">
-                Learn
-            </a>
-
-            <a href="#/everyday">
-                Everyday
-            </a>
-
-            <a href="#/lab">
-                Lab
-            </a>
-
-            <a href="#/quiz">
-                Quiz
-            </a>
-
+        <!-- Primary Navigation -->
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <a href="#/" id="nav-home"><span class="nav-icon">⌂</span> Home</a>
+            <a href="#/universe" id="nav-universe"><span class="nav-icon">🌌</span> Universe</a>
+            <a href="#/learn" id="nav-learn"><span class="nav-icon">📚</span> Learn</a>
+            <a href="#/lab" id="nav-lab"><span class="nav-icon">🧪</span> Lab</a>
+            <a href="#/quiz" id="nav-quiz"><span class="nav-icon">🎯</span> Quiz</a>
+            <a href="#/everyday" id="nav-everyday"><span class="nav-icon">🌍</span> Everyday</a>
+            <a href="#/projects" id="nav-projects"><span class="nav-icon">🚀</span> Projects</a>
+            <a href="#/formulas" id="nav-formulas"><span class="nav-icon">📐</span> Formulas</a>
         </nav>
 
+        <!-- Header right -->
         <div class="header-right">
 
-            <button
-                class="search-btn"
-                id="searchOpen"
-                title="Search"
-            >
-                ⌕
-            </button>
-
-            <a
-                href="#/progress"
-                class="xp-pill"
-            >
-                ⚡
-                <span id="xpDisplay">
-                    0 XP
-                </span>
+            <a href="#/progress" class="xp-pill" id="xpPill" aria-label="View your XP and progress">
+                <span class="xp-bolt" aria-hidden="true">⚡</span>
+                <span id="xpDisplay">0 XP</span>
+                <span class="xp-level" id="levelDisplay">Lv.1</span>
             </a>
 
-            <button
-                class="mobile-menu"
-                id="mobileMenu"
-            >
-                ☰
+            <button class="icon-btn" id="searchOpen" title="Search (Ctrl+K)" aria-label="Open search">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <circle cx="7" cy="7" r="5"/>
+                    <path d="M11 11l3 3"/>
+                </svg>
+            </button>
+
+            <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu" aria-expanded="false">
+                <svg id="menuIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M3 6h12M3 12h12"/>
+                </svg>
             </button>
 
         </div>
 
     </header>
 
-    <!-- Mobile navigation -->
-    <div
-        class="mobile-nav"
-        id="mobileNav"
-    >
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
+        <a href="#/" class="mobile-nav-link"><span>⌂</span> Home</a>
+        <a href="#/universe" class="mobile-nav-link"><span>🌌</span> Universe</a>
+        <a href="#/learn" class="mobile-nav-link"><span>📚</span> Learn — ECE Zero</a>
+        <a href="#/everyday" class="mobile-nav-link"><span>🌍</span> Everyday Engineering</a>
+        <a href="#/lab" class="mobile-nav-link"><span>🧪</span> NCU Lab</a>
+        <a href="#/quiz" class="mobile-nav-link"><span>🎯</span> Quiz Arena</a>
+        <a href="#/projects" class="mobile-nav-link"><span>🚀</span> Projects</a>
+        <a href="#/stories" class="mobile-nav-link"><span>📖</span> Stories</a>
+        <a href="#/formulas" class="mobile-nav-link"><span>📐</span> Formulas</a>
+        <a href="#/interview" class="mobile-nav-link"><span>💼</span> Interview Hub</a>
+        <a href="#/characters" class="mobile-nav-link"><span>👾</span> Circuit Crew</a>
+        <a href="#/progress" class="mobile-nav-link"><span>📊</span> Progress</a>
+    </nav>
 
-        <a href="#/">Home</a>
-        <a href="#/universe">Universe</a>
-        <a href="#/learn">Learn</a>
-        <a href="#/everyday">Everyday Engineering</a>
-        <a href="#/lab">NCU Lab</a>
-        <a href="#/quiz">Quiz Arena</a>
-        <a href="#/progress">Progress</a>
+    <!-- ======================================================
+         MAIN APP
+    ====================================================== -->
+    <main id="app" role="main" aria-live="polite"></main>
 
-    </div>
-
-    <!-- Main -->
-    <main id="app"></main>
-
-    <!-- Search -->
-    <div
-        class="search-overlay"
-        id="searchOverlay"
-    >
+    <!-- ======================================================
+         SEARCH OVERLAY
+    ====================================================== -->
+    <div class="search-overlay" id="searchOverlay" role="dialog" aria-label="Search" aria-modal="true">
 
         <div class="search-box">
 
-            <div class="search-top">
-
-                <div>
-
-                    <span class="eyebrow">
-                        NCU SEARCH ENGINE
-                    </span>
-
-                    <h2>
-                        Find your concept.
-                    </h2>
-
-                </div>
-
-                <button
-                    class="close-btn"
-                    id="searchClose"
-                >
-                    ×
-                </button>
-
+            <div class="search-header">
+                <span class="search-title">⌕ NCU SEARCH ENGINE</span>
+                <button class="icon-btn" id="searchClose" aria-label="Close search">✕</button>
             </div>
 
-            <div class="search-input">
-
-                <span>
-                    ⌕
+            <div class="search-field">
+                <span class="search-icon" aria-hidden="true">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <circle cx="8" cy="8" r="6"/>
+                        <path d="M13 13l3.5 3.5"/>
+                    </svg>
                 </span>
-
                 <input
                     id="searchInput"
                     type="search"
-                    placeholder="Search voltage, transistor, ESP32..."
+                    placeholder="Search voltage, MOSFET, ESP32, ADC..."
+                    autocomplete="off"
+                    aria-label="Search the ECE Universe"
                 >
-
             </div>
 
-            <div
-                class="search-results"
-                id="searchResults"
-            >
+            <div class="search-results" id="searchResults" role="listbox">
+                <div class="search-empty">Search the ECE Universe.</div>
+            </div>
 
-                <div class="search-placeholder">
-                    Search the ECE Universe.
-                </div>
-
+            <div class="search-shortcuts">
+                <span class="search-key"><span class="key">Ctrl</span><span class="key">K</span> to open</span>
+                <span class="search-key"><span class="key">Esc</span> to close</span>
             </div>
 
         </div>
 
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- ======================================================
+         FOOTER
+    ====================================================== -->
+    <footer class="footer" role="contentinfo">
+
+        <div class="footer-circuit" aria-hidden="true"></div>
 
         <div class="footer-inner">
 
             <div>
 
-                <div class="footer-brand">
-                    ⚡ NAMMA CIRCUIT
+                <div class="footer-brand-text">
+                    <svg width="28" height="28" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                        <rect width="44" height="44" rx="10" fill="#050911"/>
+                        <path d="M24 13L19 21H23L20 29L27 20H23L25 13Z" fill="#7fffb2"/>
+                    </svg>
+                    NAMMA CIRCUIT
                 </div>
 
-                <p>
-                    Short Circuit illa, Smart Circuit.
-                </p>
-
-                <small>
-                    An interactive ECE learning universe.
-                </small>
+                <p class="footer-tagline">Short Circuit illa, Smart Circuit.</p>
+                <small class="footer-sub">An interactive ECE learning universe.</small>
 
             </div>
 
-            <div class="footer-links">
+            <div class="footer-col">
 
-                <div>
+                <h5>Explore</h5>
 
-                    <span>
-                        EXPLORE
-                    </span>
+                <a href="#/universe">ECE Universe</a>
+                <a href="#/learn">ECE Zero</a>
+                <a href="#/everyday">Everyday Engineering</a>
+                <a href="#/characters">Circuit Crew</a>
+                <a href="#/roadmap">Learning Roadmap</a>
 
-                    <a href="#/universe">
-                        ECE Universe
-                    </a>
+            </div>
 
-                    <a href="#/learn">
-                        Learn
-                    </a>
+            <div class="footer-col">
 
-                    <a href="#/everyday">
-                        Everyday Engineering
-                    </a>
+                <h5>Experience</h5>
 
-                </div>
+                <a href="#/lab">NCU Lab</a>
+                <a href="#/quiz">Quiz Arena</a>
+                <a href="#/projects">Projects</a>
+                <a href="#/stories">NCU Stories</a>
+                <a href="#/formulas">Formula Engine</a>
+                <a href="#/interview">Interview Hub</a>
 
-                <div>
+            </div>
 
-                    <span>
-                        EXPERIENCE
-                    </span>
+            <div class="footer-col">
 
-                    <a href="#/lab">
-                        NCU Lab
-                    </a>
+                <h5>Track</h5>
 
-                    <a href="#/quiz">
-                        Quiz Arena
-                    </a>
-
-                    <a href="#/characters">
-                        Circuit Crew
-                    </a>
-
-                </div>
+                <a href="#/progress">Your Progress</a>
+                <a href="#/progress">XP & Levels</a>
+                <a href="#/quiz">Quiz Arena</a>
 
             </div>
 
         </div>
 
         <div class="footer-bottom">
-
-            <span>
-                © <span id="year"></span> Namma Circuit
-            </span>
-
-            <span>
-                Built for curious engineers.
-            </span>
-
+            <span>© <span id="footerYear"></span> Namma Circuit</span>
+            <span>Short Circuit illa, Smart Circuit. ⚡</span>
         </div>
 
     </footer>
+
+    <!-- XP celebration popup (injected by JS) -->
+    <div id="xpPopContainer" aria-live="polite"></div>
+
+    <!-- Mascot floating container -->
+    <div id="mascotFloat" class="mascot-float" aria-live="polite"></div>
 
     <script src="app.js"></script>
 
