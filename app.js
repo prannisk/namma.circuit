@@ -1615,40 +1615,6 @@ function renderTopic(id) {
                 </section>
 
             </main>
-
-            <!-- Sidebar -->
-            <aside class="lesson-sidebar">
-                <div class="sidebar-title">ECE ZERO</div>
-                <a class="sidebar-link" href="#/learn">← All ECE Zero</a>
-                <a class="sidebar-link" href="#/universe">🌌 Universe</a>
-                <a class="sidebar-link" href="#/characters">👾 Circuit Crew</a>
-                <a class="sidebar-link" href="#/lab">🧪 NCU Lab</a>
-                <a class="sidebar-link" href="#/quiz">🎯 Quiz Arena</a>
-                <a class="sidebar-link" href="#/formulas">📐 Formulas</a>
-
-                <div class="sidebar-title mt-20">THIS LESSON</div>
-                <div style="padding:14px 0;font-size:12px;color:var(--muted)">
-                    <div style="margin-bottom:8px">
-                        <span style="color:var(--dim);font-family:var(--mono);font-size:9px">MASCOT</span><br>
-                        <span>${mascot.emoji} ${mascot.name} — ${mascot.concept}</span>
-                    </div>
-                    ${lesson.formula ? `<div>
-                        <span style="color:var(--dim);font-family:var(--mono);font-size:9px">FORMULA</span><br>
-                        <span style="font-family:var(--mono);color:var(--mint);font-size:13px">${lesson.formula}</span>
-                    </div>` : ""}
-                    <div style="margin-top:8px">
-                        <span style="color:var(--dim);font-family:var(--mono);font-size:9px">XP</span><br>
-                        <span style="color:var(--mint)">+${lesson.xp} XP on pass</span>
-                    </div>
-                </div>
-
-                <div class="sidebar-title mt-8">LESSON ${idx+1}/${lessonIds.length}</div>
-                ${lessonIds.map(lid => {
-                    const m = DB.isMastered(lid);
-                    const u = isUnlocked(lid);
-                    return `<a class="sidebar-link" href="${u ? "#/topic/"+lid : "javascript:void(0)"}" style="${lid===id?"color:var(--mint)":""}${!u?" opacity:.4":""}">${m?"✓ ":""}${lessons[lid].title}</a>`;
-                }).join("")}
-            </aside>
         </div>
     </div>`;
 }
